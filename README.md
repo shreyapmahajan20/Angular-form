@@ -1,4 +1,4 @@
-# CEFS BNP UI Library + Demo App
+
 
 ## Project Structure
 
