@@ -1,0 +1,86 @@
+{
+  "formId": "employeeCreate",
+  "title": "Employee Details",
+  "description": "Form for entering a new employee's personal and remuneration data.",
+  "fields": [
+    {
+      "name": "firstName",
+      "label": "First Name",
+      "type": "text",
+      "componentKey": "cefs-bnp-ui-txt",
+      "ui": {
+        "placeholder": "Enter first name"
+      },
+      "validation": {
+        "required": true,
+        "maxLength": 50,
+        "pattern": "^[\\s\\S]*$"
+      }
+    },
+    {
+      "name": "lastName",
+      "label": "Last Name",
+      "type": "text",
+      "componentKey": "cefs-bnp-ui-txt",
+      "ui": {
+        "placeholder": "Enter last name"
+      },
+      "validation": {
+        "required": true,
+        "maxLength": 50,
+        "pattern": "^[\\s\\S]*$"
+      }
+    },
+    {
+      "name": "email",
+      "label": "Email",
+      "type": "text",
+      "componentKey": "cefs-bnp-ui-txt",
+      "ui": {
+        "placeholder": "Enter e-mail address"
+      },
+      "validation": {
+        "required": false,
+        "maxLength": 100,
+        "pattern": "^[\\w.%+-]+@[\\w.-]+\\.[A-Za-z]{2,}$"
+      },
+      "config": {
+        "enabledFlag": "emailEnabled"
+      }
+    },
+    {
+      "name": "salaryCurrency",
+      "label": "Salary Currency",
+      "type": "select",
+      "componentKey": "cefs-bnp-ui-ddl",
+      "options": [
+        { "value": "USD", "label": "US Dollar" },
+        { "value": "EUR", "label": "Euro" },
+        { "value": "JPY", "label": "Japanese Yen" },
+        { "value": "GBP", "label": "British Pound" },
+        { "value": "CHF", "label": "Swiss Franc" },
+        { "value": "CAD", "label": "Canadian Dollar" },
+        { "value": "AUD", "label": "Australian Dollar" },
+        { "value": "CNY", "label": "Chinese Yuan" },
+        { "value": "HKD", "label": "Hong Kong Dollar" },
+        { "value": "NZD", "label": "New Zealand Dollar" }
+      ],
+      "validation": {
+        "required": true,
+        "singleSelect": true
+      }
+    },
+    {
+      "name": "salary",
+      "label": "Salary",
+      "type": "number",
+      "componentKey": "cefs-bnp-ui-txt",
+      "ui": {
+        "placeholder": "Enter salary amount"
+      },
+      "validation": {
+        "required": true
+      }
+    }
+  ]
+}

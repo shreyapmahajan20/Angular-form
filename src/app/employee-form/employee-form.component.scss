@@ -1,0 +1,304 @@
+// ── CEFS Demo App – Employee Form ─────────────────────────────────────────────
+$green:     #00965E;
+$green-dark:#007A4C;
+$white:     #FFFFFF;
+$bg:        #F7F8FA;
+$border:    #E0E0E0;
+$text:      #1A1A1A;
+$muted:     #666666;
+$error:     #D0021B;
+$font:      'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+// ── Page ──────────────────────────────────────────────────────────────────────
+.ef-page {
+  min-height: 100vh;
+  background: $bg;
+  display: flex;
+  flex-direction: column;
+  font-family: $font;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.ef-header {
+  background: $white;
+  border-bottom: 3px solid $green;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  &__inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__title {
+    font-size: 13px;
+    font-weight: 500;
+    color: $muted;
+    margin-left: auto;
+    letter-spacing: 0.03em;
+  }
+}
+
+.ef-brand-bar {
+  width: 4px;
+  height: 28px;
+  background: $green;
+  border-radius: 2px;
+}
+
+.ef-brand-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: $text;
+  letter-spacing: -0.01em;
+}
+
+// ── Main ──────────────────────────────────────────────────────────────────────
+.ef-main {
+  flex: 1;
+  max-width: 640px;
+  margin: 40px auto;
+  padding: 0 24px 60px;
+  width: 100%;
+}
+
+// ── Card ──────────────────────────────────────────────────────────────────────
+.ef-card {
+  background: $white;
+  border-radius: 8px;
+  border: 1px solid $border;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+
+  &__head {
+    padding: 28px 32px 20px;
+    border-bottom: 1px solid $border;
+    background: linear-gradient(135deg, #F9FFFE 0%, $white 100%);
+  }
+
+  &__title {
+    font-size: 20px;
+    font-weight: 700;
+    color: $text;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+
+  &__desc {
+    font-size: 13px;
+    color: $muted;
+    line-height: 1.5;
+  }
+}
+
+// ── Form ──────────────────────────────────────────────────────────────────────
+form {
+  padding: 28px 32px;
+}
+
+.ef-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ef-field-row {
+  width: 100%;
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────────
+.ef-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid $border;
+}
+
+// ── Buttons ───────────────────────────────────────────────────────────────────
+.ef-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 24px;
+  border-radius: 4px;
+  font-family: $font;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+
+  &--primary {
+    background: $green;
+    color: $white;
+    letter-spacing: 0.02em;
+
+    &:hover {
+      background: $green-dark;
+      box-shadow: 0 2px 8px rgba(0, 150, 94, 0.35);
+    }
+
+    &:active { transform: translateY(1px); }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: $muted;
+    border: 1.5px solid $border;
+
+    &:hover {
+      background: $bg;
+      border-color: #BBBBBB;
+    }
+  }
+}
+
+// ── Success Banner ────────────────────────────────────────────────────────────
+.ef-success-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 32px;
+  background: #F0FFF8;
+  border-bottom: 1px solid #B8EEDD;
+  color: #007A4C;
+
+  strong { font-weight: 700; display: block; }
+  p { font-size: 13px; color: $muted; }
+}
+
+.ef-success-icon {
+  width: 36px;
+  height: 36px;
+  background: $green;
+  color: $white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+// ── Debug ─────────────────────────────────────────────────────────────────────
+.ef-debug {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: #FFF5F5;
+  border: 1px solid #FFD0D0;
+  border-radius: 4px;
+
+  &__title {
+    font-size: 13px;
+    color: $error;
+    font-weight: 500;
+  }
+}
+
+// ── Preview ───────────────────────────────────────────────────────────────────
+.ef-preview {
+  padding: 0 32px 28px;
+
+  &__title {
+    font-size: 12px;
+    font-weight: 600;
+    color: $muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+    padding-top: 20px;
+    border-top: 1px solid $border;
+  }
+
+  pre {
+    background: #F4F5F7;
+    border-radius: 4px;
+    padding: 16px;
+    font-size: 12px;
+    color: $text;
+    overflow-x: auto;
+    line-height: 1.6;
+  }
+}
+
+// ── Showcase ──────────────────────────────────────────────────────────────────
+.ef-showcase {
+  margin-top: 32px;
+
+  &__title {
+    font-size: 13px;
+    font-weight: 600;
+    color: $muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+
+    @media (max-width: 560px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__item {
+    background: $white;
+    border: 1px solid $border;
+    border-radius: 6px;
+    padding: 14px 16px;
+
+    p {
+      font-size: 13px;
+      font-weight: 600;
+      color: $text;
+      margin: 6px 0 4px;
+    }
+
+    small {
+      font-size: 11px;
+      color: $muted;
+      line-height: 1.4;
+    }
+  }
+}
+
+.ef-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: 'SF Mono', 'Fira Mono', monospace;
+  background: #E8F5EF;
+  color: $green-dark;
+  letter-spacing: 0.02em;
+
+  &--email {
+    background: #E8F0FF;
+    color: #2B5BE0;
+  }
+
+  &--dd {
+    background: #FFF3E8;
+    color: #C05E00;
+  }
+}

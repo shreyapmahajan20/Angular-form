@@ -1,0 +1,36 @@
+@use '../variables' as v;
+
+.cefs-field-wrapper {
+  @include v.field-wrapper;
+}
+
+.cefs-label {
+  @include v.field-label;
+}
+
+.cefs-input-wrapper {
+  position: relative;
+  width: 100%;
+
+  .cefs-email-icon {
+    position: absolute;
+    left: v.$spacing-md;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+  }
+}
+
+.cefs-input {
+  @include v.base-input;
+
+  &.has-icon {
+    padding-left: 40px;
+  }
+}
+
+.cefs-error {
+  @include v.error-message;
+}

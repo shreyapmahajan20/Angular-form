@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEFS UI Library – Component Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── Design Tokens ── */
+:root {
+  --green:        #00965E;
+  --green-dark:   #007A4C;
+  --error:        #D0021B;
+  --error-bg:     #FFF5F5;
+  --label:        #333333;
+  --placeholder:  #9E9E9E;
+  --border:       #CCCCCC;
+  --border-focus: #333333;
+  --border-error: #D0021B;
+  --bg:           #FFFFFF;
+  --bg-page:      #F7F8FA;
+  --text:         #1A1A1A;
+  --muted:        #666666;
+  --hover-bg:     #F0F0F0;
+  --checked:      #00965E;
+  --font:         'DM Sans', 'Helvetica Neue', Arial, sans-serif;
+  --radius:       4px;
+  --input-h:      44px;
+  --border-w:     1.5px;
+  --trans:        0.18s ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg-page);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ── Layout ── */
+.page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+
+.header {
+  background: #fff;
+  border-bottom: 3px solid var(--green);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  margin: 0 -20px 0;
+  padding: 0 20px;
+}
+.header-inner {
+  max-width: 660px;
+  margin: 0 auto;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.brand-bar { width: 4px; height: 28px; background: var(--green); border-radius: 2px; }
+.brand-text { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+.header-title { font-size: 13px; color: var(--muted); margin-left: auto; letter-spacing: 0.03em; }
+
+/* ── Card ── */
+.card {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #E0E0E0;
+  box-shadow: 0 2px 16px rgba(0,0,0,.06);
+  margin-top: 36px;
+  overflow: hidden;
+}
+.card-head {
+  padding: 28px 32px 20px;
+  border-bottom: 1px solid #E8E8E8;
+  background: linear-gradient(135deg, #F9FFFE 0%, #fff 100%);
+}
+.card-title { font-size: 20px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 4px; }
+.card-desc  { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+.form-body { padding: 28px 32px; display: flex; flex-direction: column; gap: 22px; }
+
+/* ── Field Wrapper ── */
+.field { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+
+/* ── Label ── */
+.label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--label);
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.req  { color: var(--error); }
+.info {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 1.5px solid var(--muted); color: var(--muted);
+  font-size: 10px; font-style: italic; font-weight: 700;
+  margin-left: 2px; cursor: help;
+}
+
+/* ── Base Input ── */
+.input {
+  height: var(--input-h);
+  width: 100%;
+  padding: 0 12px;
+  font-size: 15px;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg);
+  border: var(--border-w) solid var(--border);
+  border-radius: var(--radius);
+  outline: none;
+  transition: border-color var(--trans), box-shadow var(--trans);
+}
+.input::placeholder { color: var(--placeholder); }
+.input:focus { border-color: var(--border-focus); box-shadow: 0 0 0 2px rgba(0,0,0,.08); }
+.input.err  { border-color: var(--border-error); background: var(--error-bg); }
+.input.err:focus { box-shadow: 0 0 0 2px rgba(208,2,27,.1); }
+
+/* ── Email wrapper ── */
+.input-wrap { position: relative; }
+.email-icon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  display: flex; align-items: center; pointer-events: none;
+}
+.input.has-icon { padding-left: 40px; }
+
+/* ── Error ── */
+.error-msg {
+  display: flex; align-items: center; gap: 5px;
+  color: var(--error); font-size: 12px;
+  animation: fadeDown .15s ease;
+}
+.err-icon {
+  width: 16px; height: 16px; border-radius: 50%; background: var(--error);
+  color: #fff; font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Dropdown ── */
+.dd-wrap { position: relative; }
+.dd-trigger {
+  display: flex; align-items: center; justify-content: space-between;
+  height: var(--input-h); padding: 0 12px;
+  font-size: 15px; font-family: var(--font);
+  color: var(--text); background: var(--bg);
+  border: var(--border-w) solid var(--border);
+  border-radius: var(--radius); cursor: pointer;
+  user-select: none;
+  transition: border-color var(--trans), box-shadow var(--trans);
+}
+.dd-trigger:focus { outline: none; border-color: var(--border-focus); box-shadow: 0 0 0 2px rgba(0,0,0,.08); }
+.dd-trigger.open  { border-color: var(--border-focus); box-shadow: 0 0 0 2px rgba(0,0,0,.08); border-radius: var(--radius) var(--radius) 0 0; }
+.dd-trigger.err   { border-color: var(--border-error); background: var(--error-bg); }
+.dd-placeholder   { color: var(--placeholder); }
+.dd-arrow { display: flex; align-items: center; margin-left: 8px; transition: transform var(--trans); }
+.dd-arrow.up { transform: rotate(180deg); }
+
+.dd-panel {
+  position: absolute; left: 0; right: 0; z-index: 100;
+  background: var(--bg);
+  border: var(--border-w) solid var(--border-focus);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  max-height: 220px; overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,.10);
+  animation: ddSlide .15s ease;
+}
+@keyframes ddSlide { from { opacity:0; transform: translateY(-6px); } to { opacity:1; transform: translateY(0); } }
+
+.dd-panel::-webkit-scrollbar { width: 4px; }
+.dd-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.dd-option {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; font-size: 15px; cursor: pointer;
+  transition: background var(--trans);
+  border-top: 1px solid #F0F0F0;
+}
+.dd-option:first-child { border-top: none; }
+.dd-option:hover { background: var(--hover-bg); }
+.dd-option.sel { background: rgba(0,150,94,.04); }
+
+.dd-checkbox {
+  width: 20px; height: 20px; border-radius: 4px;
+  border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; background: var(--bg);
+  transition: background var(--trans), border-color var(--trans);
+}
+.dd-option.sel .dd-checkbox { background: var(--checked); border-color: var(--checked); }
+.dd-opt-label { flex: 1; }
+.dd-option.sel .dd-opt-label { font-weight: 600; }
+
+/* ── Actions ── */
+.actions {
+  display: flex; justify-content: flex-end; gap: 12px;
+  padding: 20px 32px 28px;
+  border-top: 1px solid #E8E8E8;
+}
+.btn {
+  height: 40px; padding: 0 24px; border-radius: var(--radius);
+  font-family: var(--font); font-size: 14px; font-weight: 600;
+  cursor: pointer; border: none; transition: background .15s, box-shadow .15s;
+}
+.btn-primary  { background: var(--green); color: #fff; }
+.btn-primary:hover { background: var(--green-dark); box-shadow: 0 2px 8px rgba(0,150,94,.35); }
+.btn-ghost    { background: transparent; color: var(--muted); border: 1.5px solid #DDD; }
+.btn-ghost:hover { background: var(--bg-page); }
+
+/* ── Success ── */
+.success-banner {
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px 32px; background: #F0FFF8;
+  border-bottom: 1px solid #B8EEDD; color: #007A4C;
+  display: none;
+}
+.success-banner.show { display: flex; }
+.success-icon {
+  width: 36px; height: 36px; background: var(--green); color: #fff;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 700; flex-shrink: 0;
+}
+.success-banner strong { display: block; font-size: 15px; }
+.success-banner p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+/* ── Showcase ── */
+.showcase { margin-top: 28px; }
+.showcase-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px; }
+.showcase-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.showcase-item { background: #fff; border: 1px solid #E0E0E0; border-radius: 6px; padding: 14px 16px; }
+.showcase-item p { font-size: 13px; font-weight: 600; margin: 6px 0 3px; }
+.showcase-item small { font-size: 11px; color: var(--muted); line-height: 1.4; display: block; }
+.badge { display: inline-block; padding: 2px 7px; border-radius: 3px; font-size: 10px; font-weight: 700; font-family: 'SF Mono','Fira Mono',monospace; background: #E8F5EF; color: var(--green-dark); }
+.badge-b { background: #E8F0FF; color: #2B5BE0; }
+.badge-c { background: #FFF3E8; color: #C05E00; }
+
+@media(max-width:560px){
+  .form-body,.card-head,.actions{padding-left:20px;padding-right:20px;}
+  .showcase-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="header">
+    <div class="header-inner">
+      <span class="brand-bar"></span>
+      <span class="brand-text">BNP Paribas</span>
+      <span class="header-title">CEFS Employee Platform</span>
+    </div>
+  </div>
+
+  <div class="card">
+
+    <div class="card-head">
+      <h1 class="card-title">Employee Details</h1>
+      <p class="card-desc">Form for entering a new employee's personal and remuneration data.</p>
+    </div>
+
+    <div class="success-banner" id="successBanner">
+      <span class="success-icon">✓</span>
+      <div>
+        <strong>Employee record created successfully!</strong>
+        <p>The form data has been submitted.</p>
+      </div>
+    </div>
+
+    <div class="form-body" id="formBody">
+
+      <!-- ① First Name — cefs-input-text -->
+      <div class="field">
+        <label class="label" for="firstName">
+          First Name <span class="req">*</span>
+        </label>
+        <input class="input" id="firstName" name="firstName" type="text"
+               placeholder="Enter first name" maxlength="50"
+               oninput="validate(this)" onblur="validate(this)">
+        <div class="error-msg" id="firstName-err" style="display:none">
+          <span class="err-icon">!</span><span id="firstName-errtxt"></span>
+        </div>
+      </div>
+
+      <!-- ① Last Name — cefs-input-text -->
+      <div class="field">
+        <label class="label" for="lastName">
+          Last Name <span class="req">*</span>
+        </label>
+        <input class="input" id="lastName" name="lastName" type="text"
+               placeholder="Enter last name" maxlength="50"
+               oninput="validate(this)" onblur="validate(this)">
+        <div class="error-msg" id="lastName-err" style="display:none">
+          <span class="err-icon">!</span><span id="lastName-errtxt"></span>
+        </div>
+      </div>
+
+      <!-- ② Email — cefs-email-input -->
+      <div class="field">
+        <label class="label" for="email">
+          Email
+          <span class="info" title="Optional field. Must be a valid email address.">i</span>
+        </label>
+        <div class="input-wrap">
+          <span class="email-icon">
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+              <path d="M14.4 0H1.6C.72 0 .008.72.008 1.6L0 10.4C0 11.28.72 12 1.6 12H14.4C15.28 12 16 11.28 16 10.4V1.6C16 .72 15.28 0 14.4 0zm0 3.2L8 7.2 1.6 3.2V1.6L8 5.6l6.4-4V3.2z" fill="#9E9E9E"/>
+            </svg>
+          </span>
+          <input class="input has-icon" id="email" name="email" type="email"
+                 placeholder="Enter e-mail address" maxlength="100"
+                 oninput="validateEmail(this)" onblur="validateEmail(this)">
+        </div>
+        <div class="error-msg" id="email-err" style="display:none">
+          <span class="err-icon">!</span><span id="email-errtxt"></span>
+        </div>
+      </div>
+
+      <!-- ③ Salary Currency — cefs-dropdown (single select) -->
+      <div class="field">
+        <label class="label">Salary Currency <span class="req">*</span></label>
+        <div class="dd-wrap" id="ddWrapCurrency">
+          <div class="dd-trigger" tabindex="0" id="ddTriggerCurrency"
+               onclick="toggleDD('Currency')"
+               onkeydown="if(event.key==='Enter'||event.key===' ')toggleDD('Currency')">
+            <span class="dd-placeholder" id="ddDisplayCurrency">Select...</span>
+            <span class="dd-arrow" id="ddArrowCurrency">
+              <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                <path d="M1 1l5 6 5-6" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+          <div class="dd-panel" id="ddPanelCurrency" style="display:none">
+            <div class="dd-option" onclick="selectCurrency('USD','US Dollar')"><span class="dd-opt-label">US Dollar</span></div>
+            <div class="dd-option" onclick="selectCurrency('EUR','Euro')"><span class="dd-opt-label">Euro</span></div>
+            <div class="dd-option" onclick="selectCurrency('JPY','Japanese Yen')"><span class="dd-opt-label">Japanese Yen</span></div>
+            <div class="dd-option" onclick="selectCurrency('GBP','British Pound')"><span class="dd-opt-label">British Pound</span></div>
+            <div class="dd-option" onclick="selectCurrency('CHF','Swiss Franc')"><span class="dd-opt-label">Swiss Franc</span></div>
+            <div class="dd-option" onclick="selectCurrency('CAD','Canadian Dollar')"><span class="dd-opt-label">Canadian Dollar</span></div>
+            <div class="dd-option" onclick="selectCurrency('AUD','Australian Dollar')"><span class="dd-opt-label">Australian Dollar</span></div>
+            <div class="dd-option" onclick="selectCurrency('CNY','Chinese Yuan')"><span class="dd-opt-label">Chinese Yuan</span></div>
+            <div class="dd-option" onclick="selectCurrency('HKD','Hong Kong Dollar')"><span class="dd-opt-label">Hong Kong Dollar</span></div>
+            <div class="dd-option" onclick="selectCurrency('NZD','New Zealand Dollar')"><span class="dd-opt-label">New Zealand Dollar</span></div>
+          </div>
+        </div>
+        <div class="error-msg" id="currency-err" style="display:none">
+          <span class="err-icon">!</span><span>Salary Currency is required</span>
+        </div>
+      </div>
+
+      <!-- ③ Country — cefs-dropdown (multi-select) -->
+      <div class="field">
+        <label class="label">
+          Country
+          <span class="info" title="You can select multiple countries.">i</span>
+        </label>
+        <div class="dd-wrap" id="ddWrapCountry">
+          <div class="dd-trigger" tabindex="0" id="ddTriggerCountry"
+               onclick="toggleDD('Country')"
+               onkeydown="if(event.key==='Enter'||event.key===' ')toggleDD('Country')">
+            <span id="ddDisplayCountry" class="dd-placeholder">Select...</span>
+            <span class="dd-arrow" id="ddArrowCountry">
+              <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                <path d="M1 1l5 6 5-6" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+          <div class="dd-panel" id="ddPanelCountry" style="display:none" id="countryPanel">
+            <!-- Will be rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Salary — cefs-input-text (number) -->
+      <div class="field">
+        <label class="label" for="salary">Salary <span class="req">*</span></label>
+        <input class="input" id="salary" name="salary" type="number"
+               placeholder="Enter salary amount" min="0"
+               oninput="validateSalary(this)" onblur="validateSalary(this)">
+        <div class="error-msg" id="salary-err" style="display:none">
+          <span class="err-icon">!</span><span id="salary-errtxt"></span>
+        </div>
+      </div>
+
+    </div><!-- /form-body -->
+
+    <div class="actions" id="formActions">
+      <button class="btn btn-ghost" onclick="resetForm()">Reset</button>
+      <button class="btn btn-primary" onclick="submitForm()">Submit</button>
+    </div>
+
+  </div><!-- /card -->
+
+  <!-- Component Library Showcase -->
+  <div class="showcase">
+    <p class="showcase-title">CEFS UI Library – Component Registry</p>
+    <div class="showcase-grid">
+      <div class="showcase-item">
+        <span class="badge">cefs-bnp-ui-txt</span>
+        <p>InputTextComponent</p>
+        <small>Text/number input, required, maxLength, pattern validation</small>
+      </div>
+      <div class="showcase-item">
+        <span class="badge badge-b">cefs-bnp-ui-email</span>
+        <p>EmailInputComponent</p>
+        <small>Email validation, RFC pattern, feature flag support</small>
+      </div>
+      <div class="showcase-item">
+        <span class="badge badge-c">cefs-bnp-ui-ddl</span>
+        <p>DropdownComponent</p>
+        <small>Multi/single select, checkbox UI, JSON-driven options</small>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+// ── State ────────────────────────────────────────────────────────────────────
+const state = {
+  selectedCurrency: null,
+  selectedCountries: [],
+  touched: {}
+};
+
+const COUNTRIES = [
+  'Australia','Brazil','Canada','China','Finland','Fiji',
+  'France','French Polynesia','Germany','India','Japan',
+  'Netherlands','New Zealand','Singapore','South Africa',
+  'United Kingdom','United States'
+];
+
+// ── Build country panel ───────────────────────────────────────────────────────
+(function buildCountryPanel() {
+  const panel = document.getElementById('ddPanelCountry');
+  COUNTRIES.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'dd-option';
+    div.id = 'country-opt-' + c.replace(/\s/g,'_');
+    div.innerHTML = `
+      <span class="dd-checkbox" id="chk-${c.replace(/\s/g,'_')}"></span>
+      <span class="dd-opt-label">${c}</span>`;
+    div.addEventListener('click', () => toggleCountry(c));
+    panel.appendChild(div);
+  });
+})();
+
+// ── Dropdown toggle ───────────────────────────────────────────────────────────
+function toggleDD(which) {
+  const panel = document.getElementById('ddPanel' + which);
+  const arrow = document.getElementById('ddArrow' + which);
+  const trigger = document.getElementById('ddTrigger' + which);
+  const isOpen = panel.style.display !== 'none';
+  // close all first
+  closeAllDD();
+  if (!isOpen) {
+    panel.style.display = 'block';
+    arrow.classList.add('up');
+    trigger.classList.add('open');
+  }
+}
+
+function closeAllDD() {
+  ['Currency','Country'].forEach(w => {
+    const p = document.getElementById('ddPanel'+w);
+    const a = document.getElementById('ddArrow'+w);
+    const t = document.getElementById('ddTrigger'+w);
+    if (p) { p.style.display = 'none'; }
+    if (a) a.classList.remove('up');
+    if (t) t.classList.remove('open');
+  });
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.dd-wrap')) closeAllDD();
+});
+
+// ── Currency (single select) ──────────────────────────────────────────────────
+function selectCurrency(val, label) {
+  state.selectedCurrency = val;
+  const display = document.getElementById('ddDisplayCurrency');
+  display.textContent = label;
+  display.style.color = '';
+  display.classList.remove('dd-placeholder');
+
+  // highlight selected
+  document.querySelectorAll('#ddPanelCurrency .dd-option').forEach(o => {
+    o.classList.toggle('sel', o.querySelector('.dd-opt-label').textContent === label);
+  });
+
+  closeAllDD();
+  document.getElementById('currency-err').style.display = 'none';
+  state.touched.currency = true;
+}
+
+// ── Country (multi select) ────────────────────────────────────────────────────
+function toggleCountry(country) {
+  const idx = state.selectedCountries.indexOf(country);
+  if (idx === -1) state.selectedCountries.push(country);
+  else state.selectedCountries.splice(idx, 1);
+
+  // Update checkbox UI
+  const key = country.replace(/\s/g,'_');
+  const chk = document.getElementById('chk-' + key);
+  const opt = document.getElementById('country-opt-' + key);
+
+  if (state.selectedCountries.includes(country)) {
+    chk.innerHTML = `<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    opt.classList.add('sel');
+  } else {
+    chk.innerHTML = '';
+    opt.classList.remove('sel');
+  }
+
+  // Update display label
+  const display = document.getElementById('ddDisplayCountry');
+  if (state.selectedCountries.length === 0) {
+    display.textContent = 'Select...';
+    display.classList.add('dd-placeholder');
+    display.style.color = '';
+  } else if (state.selectedCountries.length === 1) {
+    display.textContent = state.selectedCountries[0];
+    display.classList.remove('dd-placeholder');
+  } else {
+    display.textContent = state.selectedCountries.length + ' selected';
+    display.classList.remove('dd-placeholder');
+  }
+}
+
+// ── Text validation ───────────────────────────────────────────────────────────
+const LETTERS_PATTERN = /^[A-Za-z\s]+$/;
+const EMAIL_PATTERN   = /^[\w.%+-]+@[\w.-]+\.[A-Za-z]{2,}$/;
+
+function validate(input) {
+  state.touched[input.id] = true;
+  const errDiv = document.getElementById(input.id + '-err');
+  const errTxt = document.getElementById(input.id + '-errtxt');
+  const val = input.value.trim();
+  let msg = '';
+
+  if (!val) {
+    msg = input.labels[0].textContent.replace('*','').trim() + ' is required';
+  } else if (val.length > parseInt(input.maxLength)) {
+    msg = `Max ${input.maxLength} characters allowed`;
+  } else if (!LETTERS_PATTERN.test(val)) {
+    msg = input.labels[0].textContent.replace('*','').trim() + ' contains invalid characters';
+  }
+
+  if (msg) {
+    input.classList.add('err');
+    errTxt.textContent = msg;
+    errDiv.style.display = 'flex';
+  } else {
+    input.classList.remove('err');
+    errDiv.style.display = 'none';
+  }
+  return !msg;
+}
+
+function validateEmail(input) {
+  state.touched.email = true;
+  const errDiv = document.getElementById('email-err');
+  const errTxt = document.getElementById('email-errtxt');
+  const val = input.value.trim();
+  let msg = '';
+
+  if (val && val.length > 100) {
+    msg = 'Max 100 characters allowed';
+  } else if (val && !EMAIL_PATTERN.test(val)) {
+    msg = 'Please enter a valid email address';
+  }
+
+  if (msg) {
+    input.classList.add('err');
+    errTxt.textContent = msg;
+    errDiv.style.display = 'flex';
+  } else {
+    input.classList.remove('err');
+    errDiv.style.display = 'none';
+  }
+  return !msg;
+}
+
+function validateSalary(input) {
+  state.touched.salary = true;
+  const errDiv = document.getElementById('salary-err');
+  const errTxt = document.getElementById('salary-errtxt');
+  const val = input.value.trim();
+  let msg = '';
+  if (!val) msg = 'Salary is required';
+  else if (parseFloat(val) < 0) msg = 'Salary must be a positive number';
+
+  if (msg) {
+    input.classList.add('err');
+    errTxt.textContent = msg;
+    errDiv.style.display = 'flex';
+  } else {
+    input.classList.remove('err');
+    errDiv.style.display = 'none';
+  }
+  return !msg;
+}
+
+// ── Submit ────────────────────────────────────────────────────────────────────
+function submitForm() {
+  const fn = document.getElementById('firstName');
+  const ln = document.getElementById('lastName');
+  const em = document.getElementById('email');
+  const sl = document.getElementById('salary');
+
+  const v1 = validate(fn);
+  const v2 = validate(ln);
+  const v3 = validateEmail(em);
+  const v4 = validateSalary(sl);
+
+  let currencyOk = true;
+  if (!state.selectedCurrency) {
+    currencyOk = false;
+    document.getElementById('currency-err').style.display = 'flex';
+    document.getElementById('ddTriggerCurrency').classList.add('err');
+  }
+
+  if (v1 && v2 && v3 && v4 && currencyOk) {
+    document.getElementById('successBanner').classList.add('show');
+    document.getElementById('formBody').style.display = 'none';
+    document.getElementById('formActions').style.display = 'none';
+  }
+}
+
+// ── Reset ─────────────────────────────────────────────────────────────────────
+function resetForm() {
+  ['firstName','lastName','email','salary'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.value = ''; el.classList.remove('err'); }
+    const err = document.getElementById(id + '-err');
+    if (err) err.style.display = 'none';
+  });
+
+  state.selectedCurrency = null;
+  state.selectedCountries = [];
+  state.touched = {};
+
+  const disp = document.getElementById('ddDisplayCurrency');
+  disp.textContent = 'Select...'; disp.classList.add('dd-placeholder');
+  document.getElementById('ddTriggerCurrency').classList.remove('err');
+  document.getElementById('currency-err').style.display = 'none';
+  document.querySelectorAll('#ddPanelCurrency .dd-option').forEach(o => o.classList.remove('sel'));
+
+  const dispC = document.getElementById('ddDisplayCountry');
+  dispC.textContent = 'Select...'; dispC.classList.add('dd-placeholder');
+  document.querySelectorAll('#ddPanelCountry .dd-option').forEach(o => { o.classList.remove('sel'); o.querySelector('.dd-checkbox').innerHTML = ''; });
+
+  document.getElementById('successBanner').classList.remove('show');
+  document.getElementById('formBody').style.display = 'flex';
+  document.getElementById('formActions').style.display = 'flex';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<div class="ef-page">
+
+  <!-- Header -->
+  <header class="ef-header">
+    <div class="ef-header__inner">
+      <div class="ef-header__brand">
+        <span class="ef-brand-bar"></span>
+        <span class="ef-brand-text">BNP Paribas</span>
+      </div>
+      <span class="ef-header__title">CEFS Employee Platform</span>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="ef-main">
+    <div class="ef-card">
+
+      <!-- Card Header -->
+      <div class="ef-card__head">
+        <h1 class="ef-card__title">{{ config.title }}</h1>
+        <p class="ef-card__desc">{{ config.description }}</p>
+      </div>
+
+      <!-- Success Banner -->
+      <div class="ef-success-banner" *ngIf="submitSuccess">
+        <span class="ef-success-icon">✓</span>
+        <div>
+          <strong>Employee record created successfully!</strong>
+          <p>The form data has been submitted.</p>
+        </div>
+        <button class="ef-btn ef-btn--ghost" (click)="onReset()">Reset</button>
+      </div>
+
+      <!-- Form -->
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate *ngIf="!submitSuccess">
+
+        <!-- Dynamic fields -->
+        <div class="ef-fields">
+          <ng-container *ngFor="let field of config.fields">
+
+            <!-- Text / Number fields -->
+            <div class="ef-field-row" *ngIf="isTextField(field)">
+              <cefs-input-text
+                [formControlName]="field.name"
+                [name]="field.name"
+                [label]="field.label"
+                [placeholder]="field.ui?.placeholder || ''"
+                [required]="field.validation?.required || false"
+                [maxLength]="field.validation?.maxLength"
+                [pattern]="field.validation?.pattern || ''"
+                [componentKey]="field.componentKey"
+              ></cefs-input-text>
+            </div>
+
+            <!-- Email field -->
+            <div class="ef-field-row" *ngIf="isEmailField(field)">
+              <cefs-email-input
+                [formControlName]="field.name"
+                [name]="field.name"
+                [label]="field.label"
+                [placeholder]="field.ui?.placeholder || 'Enter e-mail address'"
+                [required]="field.validation?.required || false"
+                [maxLength]="field.validation?.maxLength || 100"
+                [componentKey]="field.componentKey"
+                [enabledFlag]="true"
+              ></cefs-email-input>
+            </div>
+
+            <!-- Dropdown / Select field -->
+            <div class="ef-field-row" *ngIf="isDropdownField(field)">
+              <cefs-dropdown
+                [formControlName]="field.name"
+                [name]="field.name"
+                [label]="field.label"
+                [options]="field.options || []"
+                [required]="field.validation?.required || false"
+                [singleSelect]="field.validation?.singleSelect || false"
+                [componentKey]="field.componentKey"
+                placeholder="Select..."
+              ></cefs-dropdown>
+            </div>
+
+          </ng-container>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="ef-actions">
+          <button type="button" class="ef-btn ef-btn--ghost" (click)="onReset()">
+            Reset
+          </button>
+          <button type="submit" class="ef-btn ef-btn--primary">
+            Submit
+          </button>
+        </div>
+
+        <!-- Debug panel (dev only) -->
+        <div class="ef-debug" *ngIf="submitted && !form.valid">
+          <p class="ef-debug__title">⚠ Please fix the validation errors above before submitting.</p>
+        </div>
+
+      </form>
+
+      <!-- Form value preview -->
+      <div class="ef-preview" *ngIf="submitSuccess">
+        <p class="ef-preview__title">Submitted Payload</p>
+        <pre>{{ formValue }}</pre>
+      </div>
+
+    </div>
+
+    <!-- Component Library Showcase -->
+    <div class="ef-showcase">
+      <h2 class="ef-showcase__title">CEFS UI Library Components</h2>
+      <div class="ef-showcase__grid">
+        <div class="ef-showcase__item">
+          <span class="ef-badge">cefs-bnp-ui-txt</span>
+          <p>InputTextComponent</p>
+          <small>Text input with required, maxLength, pattern validation</small>
+        </div>
+        <div class="ef-showcase__item">
+          <span class="ef-badge ef-badge--email">cefs-bnp-ui-email</span>
+          <p>EmailInputComponent</p>
+          <small>Email input with RFC pattern validation + feature flag</small>
+        </div>
+        <div class="ef-showcase__item">
+          <span class="ef-badge ef-badge--dd">cefs-bnp-ui-ddl</span>
+          <p>DropdownComponent</p>
+          <small>Multi / single select dropdown with checkbox UI</small>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>

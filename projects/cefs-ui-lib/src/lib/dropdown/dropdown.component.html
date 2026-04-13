@@ -1,0 +1,61 @@
+<div class="cefs-field-wrapper">
+  <!-- Label -->
+  <label class="cefs-label">
+    {{ label }}
+    <span *ngIf="required" class="required-star">*</span>
+    <span *ngIf="showInfo" class="info-icon" [title]="infoTooltip">i</span>
+  </label>
+
+  <!-- Trigger -->
+  <div
+    class="cefs-dd-trigger"
+    [class.open]="isOpen"
+    [class.error]="hasError"
+    [class.disabled]="disabled"
+    [class.has-value]="selectedValues.length > 0"
+    (click)="toggleDropdown()"
+    [attr.aria-expanded]="isOpen"
+    [attr.aria-haspopup]="'listbox'"
+    role="combobox"
+    tabindex="0"
+    (keydown.enter)="toggleDropdown()"
+    (keydown.space)="toggleDropdown()"
+  >
+    <span class="dd-display-text" [class.placeholder]="selectedValues.length === 0">
+      {{ selectedValues.length > 0 ? displayLabel : placeholder }}
+    </span>
+    <span class="dd-arrow" [class.rotated]="isOpen">
+      <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 1L6 7L11 1" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+  </div>
+
+  <!-- Dropdown Panel -->
+  <div class="cefs-dd-panel" *ngIf="isOpen" role="listbox" [attr.aria-multiselectable]="!singleSelect">
+    <div
+      class="cefs-dd-option"
+      *ngFor="let option of options"
+      [class.selected]="isSelected(option.value)"
+      (click)="toggleOption(option)"
+      role="option"
+      [attr.aria-selected]="isSelected(option.value)"
+    >
+      <span class="dd-checkbox" *ngIf="!singleSelect">
+        <svg *ngIf="isSelected(option.value)" width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="dd-radio" *ngIf="singleSelect">
+        <span class="dd-radio-inner" *ngIf="isSelected(option.value)"></span>
+      </span>
+      <span class="dd-option-label" [class.bold]="isSelected(option.value)">{{ option.label }}</span>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div class="cefs-error" *ngIf="hasError" role="alert" aria-live="polite">
+    <span class="error-icon">!</span>
+    <span class="error-text">{{ errorMessage }}</span>
+  </div>
+</div>
