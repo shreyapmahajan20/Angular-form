@@ -93,12 +93,11 @@ $transition-fn:        ease;
   font-family: $font-family;
   color: $color-text;
   background: $color-bg;
-  border: $border-width solid $color-border;
+  border: 1.5px solid $color-border;
   border-radius: $border-radius;
   outline: none;
   box-sizing: border-box;
-  transition: border-color $transition-speed $transition-fn,
-              box-shadow $transition-speed $transition-fn;
+  transition: border-color $transition-speed $transition-fn;
 
   &::placeholder {
     color: $color-placeholder;
@@ -106,16 +105,17 @@ $transition-fn:        ease;
   }
 
   &:focus {
-    border-color: $color-border-focus;
-    box-shadow: 0 0 0 2px rgba(0,0,0,0.08);
+    outline: none;
+    border-color: $color-border;
+    box-shadow: none;
   }
 
   &.error {
     border-color: $color-border-error;
-    background: $color-error-bg;
+    background: $color-bg;
 
     &:focus {
-      box-shadow: 0 0 0 2px rgba(208, 2, 27, 0.1);
+      box-shadow: none;
     }
   }
 
@@ -130,20 +130,21 @@ $transition-fn:        ease;
 @mixin error-message {
   display: flex;
   align-items: center;
-  gap: $spacing-xs;
+  gap: 6px;
   color: $color-error;
-  font-size: $font-size-error;
+  font-size: 13px;
   font-family: $font-family;
-  margin-top: 2px;
+  font-weight: 500;
+  margin-top: 4px;
   animation: fadeInDown 0.15s ease;
 
   .error-icon {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     background: $color-error;
     color: #fff;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     display: flex;
     align-items: center;

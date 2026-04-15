@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import {
   FormBuilder,
   FormGroup,
@@ -8,13 +9,10 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-// Import from the library (after build: from 'cefs-ui-lib')
-// During development we import directly from the source
 import { InputTextComponent } from '../../../projects/cefs-ui-lib/src/lib/input-text/input-text.component';
 import { EmailInputComponent } from '../../../projects/cefs-ui-lib/src/lib/email-input/email-input.component';
 import { DropdownComponent, DropdownOption } from '../../../projects/cefs-ui-lib/src/lib/dropdown/dropdown.component';
 
-// ── Form Config Types ─────────────────────────────────────────────────────────
 interface FieldValidation {
   required?: boolean;
   maxLength?: number;
@@ -40,67 +38,6 @@ interface EmployeeFormConfig {
   fields: FormFieldConfig[];
 }
 
-// ── Hard-coded config (mirrors employee-form.json) ───────────────────────────
-const EMPLOYEE_FORM_CONFIG: EmployeeFormConfig = {
-  formId: 'employeeCreate',
-  title: 'Employee Details',
-  description: "Form for entering a new employee's personal and remuneration data.",
-  fields: [
-    {
-      name: 'firstName',
-      label: 'First Name',
-      type: 'text',
-      componentKey: 'cefs-bnp-ui-txt',
-      ui: { placeholder: 'Enter first name' },
-      validation: { required: true, maxLength: 50, pattern: '^[A-Za-z\\s]+$' }
-    },
-    {
-      name: 'lastName',
-      label: 'Last Name',
-      type: 'text',
-      componentKey: 'cefs-bnp-ui-txt',
-      ui: { placeholder: 'Enter last name' },
-      validation: { required: true, maxLength: 50, pattern: '^[A-Za-z\\s]+$' }
-    },
-    {
-      name: 'email',
-      label: 'Email',
-      type: 'email',
-      componentKey: 'cefs-bnp-ui-email',
-      ui: { placeholder: 'Enter e-mail address' },
-      validation: { required: false, maxLength: 100 },
-      config: { enabledFlag: 'emailEnabled' }
-    },
-    {
-      name: 'salaryCurrency',
-      label: 'Salary Currency',
-      type: 'select',
-      componentKey: 'cefs-bnp-ui-ddl',
-      options: [
-        { value: 'USD', label: 'US Dollar' },
-        { value: 'EUR', label: 'Euro' },
-        { value: 'JPY', label: 'Japanese Yen' },
-        { value: 'GBP', label: 'British Pound' },
-        { value: 'CHF', label: 'Swiss Franc' },
-        { value: 'CAD', label: 'Canadian Dollar' },
-        { value: 'AUD', label: 'Australian Dollar' },
-        { value: 'CNY', label: 'Chinese Yuan' },
-        { value: 'HKD', label: 'Hong Kong Dollar' },
-        { value: 'NZD', label: 'New Zealand Dollar' }
-      ],
-      validation: { required: true, singleSelect: true }
-    },
-    {
-      name: 'salary',
-      label: 'Salary',
-      type: 'number',
-      componentKey: 'cefs-bnp-ui-txt',
-      ui: { placeholder: 'Enter salary amount' },
-      validation: { required: true }
-    }
-  ]
-};
-
 @Component({
   selector: 'app-employee-form',
   standalone: true,
@@ -115,15 +52,18 @@ const EMPLOYEE_FORM_CONFIG: EmployeeFormConfig = {
   styleUrls: ['./employee-form.component.scss']
 })
 export class EmployeeFormComponent implements OnInit {
-  config: EmployeeFormConfig = EMPLOYEE_FORM_CONFIG;
+  config!: EmployeeFormConfig;
   form!: FormGroup;
   submitted = false;
   submitSuccess = false;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.buildForm();
+    this.http.get<EmployeeFormConfig>('/assets/employee-form.json').subscribe(cfg => {
+      this.config = cfg;
+      this.buildForm();
+    });
   }
 
   private buildForm(): void {
@@ -139,27 +79,21 @@ export class EmployeeFormComponent implements OnInit {
     this.form = this.fb.group(controls);
   }
 
-  getField(name: string): FormFieldConfig | undefined {
-    return this.config.fields.find(f => f.name === name);
-  }
-
   isTextField(field: FormFieldConfig): boolean {
-    return field.type === 'text' || field.type === 'number';
+    return field.componentKey === 'cefs-bnp-ui-txt';
   }
 
   isEmailField(field: FormFieldConfig): boolean {
-    return field.type === 'email';
+    return field.componentKey === 'cefs-bnp-ui-email';
   }
 
   isDropdownField(field: FormFieldConfig): boolean {
-    return field.type === 'select';
+    return field.componentKey === 'cefs-bnp-ui-ddl';
   }
 
   onSubmit(): void {
     this.submitted = true;
-    // Mark all controls touched to trigger validation display
     Object.values(this.form.controls).forEach(ctrl => ctrl.markAsTouched());
-
     if (this.form.valid) {
       this.submitSuccess = true;
       console.log('Form submitted:', this.form.value);

@@ -68,6 +68,10 @@ export class InputTextComponent implements ControlValueAccessor, Validator, OnIn
 
   writeValue(val: string): void {
     this.value = val ?? '';
+    if (val === null || val === undefined) {
+      this.touched = false;
+      this.errorMessage = '';
+    }
     this.cdr.markForCheck();
   }
 
@@ -95,12 +99,10 @@ export class InputTextComponent implements ControlValueAccessor, Validator, OnIn
   }
 
   onBlur(): void {
-    if (!this.touched) {
-      this.touched = true;
-      this.onTouched();
-      this.runValidation();
-      this.cdr.markForCheck();
-    }
+    this.touched = true;
+    this.onTouched();
+    this.runValidation();
+    this.cdr.markForCheck();
   }
 
   private runValidation(): void {

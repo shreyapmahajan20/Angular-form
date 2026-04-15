@@ -86,6 +86,13 @@ export class DropdownComponent implements ControlValueAccessor, Validator, OnIni
   }
 
   writeValue(val: string | string[]): void {
+    if (val === null || val === undefined) {
+      this.selectedValues = [];
+      this.touched = false;
+      this.errorMessage = '';
+      this.cdr.markForCheck();
+      return;
+    }
     if (this.singleSelect) {
       this.selectedValues = val ? [val as string] : [];
     } else {

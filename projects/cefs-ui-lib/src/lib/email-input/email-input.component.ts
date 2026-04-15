@@ -62,6 +62,10 @@ export class EmailInputComponent implements ControlValueAccessor, Validator {
 
   writeValue(val: string): void {
     this.value = val ?? '';
+    if (val === null || val === undefined) {
+      this.touched = false;
+      this.errorMessage = '';
+    }
     this.cdr.markForCheck();
   }
   registerOnChange(fn: (v: string) => void): void { this.onChange = fn; }
@@ -80,12 +84,10 @@ export class EmailInputComponent implements ControlValueAccessor, Validator {
   }
 
   onBlur(): void {
-    if (!this.touched) {
-      this.touched = true;
-      this.onTouched();
-      this.runValidation();
-      this.cdr.markForCheck();
-    }
+    this.touched = true;
+    this.onTouched();
+    this.runValidation();
+    this.cdr.markForCheck();
   }
 
   private runValidation(): void {

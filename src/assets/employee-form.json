@@ -34,8 +34,8 @@
     {
       "name": "email",
       "label": "Email",
-      "type": "text",
-      "componentKey": "cefs-bnp-ui-txt",
+      "type": "email",
+      "componentKey": "cefs-bnp-ui-email",
       "ui": {
         "placeholder": "Enter e-mail address"
       },
