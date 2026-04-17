@@ -1,0 +1,49 @@
+@use '../variables' as v;
+
+.cefs-field-wrapper {
+  @include v.field-wrapper;
+}
+
+.cefs-label {
+  @include v.field-label;
+}
+
+.cefs-date-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cefs-date-input {
+  @include v.base-input;
+  padding-right: 36px;
+
+  &[type='date']::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    cursor: pointer;
+  }
+}
+
+.cefs-date-trigger {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  padding: 0;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.cefs-date-icon {
+  display: block;
+}
+
+.cefs-error {
+  @include v.error-message;
+}

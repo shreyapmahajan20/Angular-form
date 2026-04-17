@@ -52,15 +52,15 @@
 
             <!-- Full-width textarea -->
             <div class="ef-row ef-row--full" *ngIf="row.full && isTextarea(row.full)">
-              <div class="ef-field">
-                <label class="ef-label">{{ row.full.label }}</label>
-                <textarea
-                  class="ef-textarea"
-                  [formControlName]="row.full.name"
-                  [placeholder]="row.full.ui?.placeholder || ''"
-                  rows="3"
-                ></textarea>
-              </div>
+              <cefs-textarea-input
+                [formControlName]="row.full.name"
+                [name]="row.full.name"
+                [label]="row.full.label"
+                [placeholder]="row.full.ui?.placeholder || ''"
+                [required]="row.full.validation?.required || false"
+                [maxLength]="row.full.validation?.maxLength"
+                [rows]="3"
+              ></cefs-textarea-input>
             </div>
 
             <!-- Two-column row -->
@@ -75,25 +75,15 @@
                 </div>
                 <!-- Date -->
                 <div class="ef-field" *ngIf="isDate(row.left)">
-                  <label class="ef-label">{{ row.left.label }}</label>
-                  <div class="ef-date-wrap">
-                    <input
-                      #leftDateInput
-                      class="ef-input"
-                      type="date"
-                      [formControlName]="row.left.name"
-                      [placeholder]="row.left.ui?.placeholder || ''"
-                      [attr.min]="getDateMin(row.left.name)"
-                      [attr.max]="getDateMax(row.left.name)"
-                    />
-                    <button type="button" class="ef-date-trigger" (click)="openDatePicker(leftDateInput)" aria-label="Open calendar">
-                      <svg class="ef-date-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <rect x="1" y="3" width="14" height="12" rx="1.5" stroke="#9E9E9E" stroke-width="1.3"/>
-                        <path d="M1 7h14" stroke="#9E9E9E" stroke-width="1.3"/>
-                        <path d="M5 1v4M11 1v4" stroke="#9E9E9E" stroke-width="1.3" stroke-linecap="round"/>
-                      </svg>
-                    </button>
-                  </div>
+                  <cefs-date-input
+                    [formControlName]="row.left.name"
+                    [name]="row.left.name"
+                    [label]="row.left.label"
+                    [placeholder]="row.left.ui?.placeholder || ''"
+                    [required]="row.left.validation?.required || false"
+                    [min]="getDateMin(row.left.name)"
+                    [max]="getDateMax(row.left.name)"
+                  ></cefs-date-input>
                   <div class="ef-date-error" *ngIf="hasDateRangeError(row.left.name)">
                     End Date must be the same as or later than Start Date.
                   </div>
@@ -124,25 +114,15 @@
                 </div>
                 <!-- Date -->
                 <div class="ef-field" *ngIf="isDate(row.right)">
-                  <label class="ef-label">{{ row.right.label }}</label>
-                  <div class="ef-date-wrap">
-                    <input
-                      #rightDateInput
-                      class="ef-input"
-                      type="date"
-                      [formControlName]="row.right.name"
-                      [placeholder]="row.right.ui?.placeholder || ''"
-                      [attr.min]="getDateMin(row.right.name)"
-                      [attr.max]="getDateMax(row.right.name)"
-                    />
-                    <button type="button" class="ef-date-trigger" (click)="openDatePicker(rightDateInput)" aria-label="Open calendar">
-                      <svg class="ef-date-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <rect x="1" y="3" width="14" height="12" rx="1.5" stroke="#9E9E9E" stroke-width="1.3"/>
-                        <path d="M1 7h14" stroke="#9E9E9E" stroke-width="1.3"/>
-                        <path d="M5 1v4M11 1v4" stroke="#9E9E9E" stroke-width="1.3" stroke-linecap="round"/>
-                      </svg>
-                    </button>
-                  </div>
+                  <cefs-date-input
+                    [formControlName]="row.right.name"
+                    [name]="row.right.name"
+                    [label]="row.right.label"
+                    [placeholder]="row.right.ui?.placeholder || ''"
+                    [required]="row.right.validation?.required || false"
+                    [min]="getDateMin(row.right.name)"
+                    [max]="getDateMax(row.right.name)"
+                  ></cefs-date-input>
                   <div class="ef-date-error" *ngIf="hasDateRangeError(row.right.name)">
                     End Date must be the same as or later than Start Date.
                   </div>

@@ -8,6 +8,8 @@ import { CommonModule } from '@angular/common';
 
 import { DropdownComponent, DropdownOption } from '../../../projects/cefs-ui-lib/src/lib/dropdown/dropdown.component';
 import { SearchSelectComponent, SearchSelectOption } from '../../../projects/cefs-ui-lib/src/lib/search-select/search-select.component';
+import { TextareaInputComponent } from '../../../projects/cefs-ui-lib/src/lib/textarea-input/textarea-input.component';
+import { DateInputComponent } from '../../../projects/cefs-ui-lib/src/lib/date-input/date-input.component';
 
 interface FieldValidation {
   required?: boolean;
@@ -48,7 +50,9 @@ export interface FieldRow {
     CommonModule,
     ReactiveFormsModule,
     DropdownComponent,
-    SearchSelectComponent
+    SearchSelectComponent,
+    TextareaInputComponent,
+    DateInputComponent
   ],
   templateUrl: './employee-form.component.html',
   styleUrls: ['./employee-form.component.scss']
@@ -170,17 +174,6 @@ export class EmployeeFormComponent implements OnInit {
     if (fieldName !== 'startDate' && fieldName !== 'endDate') return false;
     const touched = this.form?.get('startDate')?.touched || this.form?.get('endDate')?.touched || this.submitted;
     return !!(touched && this.form?.hasError('invalidDateRange'));
-  }
-
-  openDatePicker(input: HTMLInputElement): void {
-    if (!input) return;
-    const pickerInput = input as HTMLInputElement & { showPicker?: () => void };
-    if (typeof pickerInput.showPicker === 'function') {
-      pickerInput.showPicker();
-      return;
-    }
-    input.focus();
-    input.click();
   }
 
   getOptions(field: FormFieldConfig): DropdownOption[] {

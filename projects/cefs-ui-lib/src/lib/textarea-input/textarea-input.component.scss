@@ -1,0 +1,48 @@
+@use '../variables' as v;
+
+.cefs-field-wrapper {
+  @include v.field-wrapper;
+}
+
+.cefs-label {
+  @include v.field-label;
+}
+
+.cefs-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: v.$font-family;
+  line-height: 1.4;
+  color: v.$color-text;
+  background: v.$color-bg;
+  border: 1.5px solid v.$color-border;
+  border-radius: v.$border-radius;
+  outline: none;
+  resize: vertical;
+  box-sizing: border-box;
+  transition: border-color v.$transition-speed v.$transition-fn;
+
+  &::placeholder {
+    color: v.$color-placeholder;
+  }
+
+  &:focus {
+    border-color: v.$color-border-focus;
+  }
+
+  &.error {
+    border-color: v.$color-border-error;
+  }
+
+  &:disabled {
+    background: v.$color-bg-disabled;
+    cursor: not-allowed;
+    color: v.$color-placeholder;
+  }
+}
+
+.cefs-error {
+  @include v.error-message;
+}

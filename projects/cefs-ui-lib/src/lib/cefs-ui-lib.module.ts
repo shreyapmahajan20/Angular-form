@@ -7,6 +7,8 @@ import { EmailInputComponent } from './email-input/email-input.component';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { PhoneInputComponent } from './phone-input/phone-input.component';
 import { SearchSelectComponent } from './search-select/search-select.component';
+import { TextareaInputComponent } from './textarea-input/textarea-input.component';
+import { DateInputComponent } from './date-input/date-input.component';
 
 @NgModule({
   imports: [
@@ -17,14 +19,18 @@ import { SearchSelectComponent } from './search-select/search-select.component';
     EmailInputComponent,
     DropdownComponent,
     PhoneInputComponent,
-    SearchSelectComponent
+    SearchSelectComponent,
+    TextareaInputComponent,
+    DateInputComponent
   ],
   exports: [
     InputTextComponent,
     EmailInputComponent,
     DropdownComponent,
     PhoneInputComponent,
-    SearchSelectComponent
+    SearchSelectComponent,
+    TextareaInputComponent,
+    DateInputComponent
   ]
 })
 export class CefsUiLibModule {}

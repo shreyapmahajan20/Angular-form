@@ -1,0 +1,26 @@
+<div class="cefs-field-wrapper">
+  <label class="cefs-label" [for]="name">
+    {{ label }}
+    <span *ngIf="required" class="required-star">*</span>
+    <span *ngIf="showInfo" class="info-icon" [title]="infoTooltip">i</span>
+  </label>
+
+  <textarea
+    class="cefs-textarea"
+    [class.error]="hasError"
+    [id]="name"
+    [name]="name"
+    [placeholder]="placeholder"
+    [value]="value"
+    [disabled]="disabled"
+    [attr.maxlength]="maxLength || null"
+    [rows]="rows"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+  ></textarea>
+
+  <div class="cefs-error" *ngIf="hasError" role="alert" aria-live="polite">
+    <span class="error-icon">!</span>
+    <span class="error-text">{{ errorMessage }}</span>
+  </div>
+</div>
