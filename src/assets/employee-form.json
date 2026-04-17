@@ -1,86 +1,239 @@
 {
-  "formId": "employeeCreate",
-  "title": "Employee Details",
-  "description": "Form for entering a new employee's personal and remuneration data.",
+  "formId": "newRequest",
+  "title": "New Request",
   "fields": [
     {
-      "name": "firstName",
-      "label": "First Name",
-      "type": "text",
-      "componentKey": "cefs-bnp-ui-txt",
-      "ui": {
-        "placeholder": "Enter first name"
-      },
-      "validation": {
-        "required": true,
-        "maxLength": 50,
-        "pattern": "^[\\s\\S]*$"
-      }
+      "name": "traveller",
+      "label": "",
+      "type": "search-select",
+      "componentKey": "cefs-bnp-ui-search",
+      "validation": { "required": true }
     },
     {
-      "name": "lastName",
-      "label": "Last Name",
-      "type": "text",
-      "componentKey": "cefs-bnp-ui-txt",
-      "ui": {
-        "placeholder": "Enter last name"
-      },
-      "validation": {
-        "required": true,
-        "maxLength": 50,
-        "pattern": "^[\\s\\S]*$"
-      }
+      "name": "travellerUid",
+      "label": "Traveller's UID:",
+      "type": "readonly",
+      "componentKey": "cefs-bnp-ui-readonly",
+      "layout": "col-left",
+      "ui": { "placeholder": "j07789" }
     },
     {
-      "name": "email",
-      "label": "Email",
-      "type": "email",
-      "componentKey": "cefs-bnp-ui-email",
-      "ui": {
-        "placeholder": "Enter e-mail address"
-      },
-      "validation": {
-        "required": false,
-        "maxLength": 100,
-        "pattern": "^[\\w.%+-]+@[\\w.-]+\\.[A-Za-z]{2,}$"
-      },
-      "config": {
-        "enabledFlag": "emailEnabled"
-      }
+      "name": "travellerName",
+      "label": "Traveller's Name:",
+      "type": "readonly",
+      "componentKey": "cefs-bnp-ui-readonly",
+      "layout": "col-right",
+      "ui": { "placeholder": "Sameer AMRUTIA" }
     },
     {
-      "name": "salaryCurrency",
-      "label": "Salary Currency",
+      "name": "startDate",
+      "label": "Start Date",
+      "type": "date",
+      "componentKey": "cefs-bnp-ui-date",
+      "layout": "col-left",
+      "ui": { "placeholder": "Placeholder" },
+      "validation": { "required": true }
+    },
+    {
+      "name": "endDate",
+      "label": "End Date",
+      "type": "date",
+      "componentKey": "cefs-bnp-ui-date",
+      "layout": "col-right",
+      "ui": { "placeholder": "Placeholder" },
+      "validation": { "required": true }
+    },
+    {
+      "name": "originCity",
+      "label": "Origin City",
       "type": "select",
       "componentKey": "cefs-bnp-ui-ddl",
+      "layout": "col-left",
       "options": [
-        { "value": "USD", "label": "US Dollar" },
-        { "value": "EUR", "label": "Euro" },
-        { "value": "JPY", "label": "Japanese Yen" },
-        { "value": "GBP", "label": "British Pound" },
-        { "value": "CHF", "label": "Swiss Franc" },
-        { "value": "CAD", "label": "Canadian Dollar" },
-        { "value": "AUD", "label": "Australian Dollar" },
-        { "value": "CNY", "label": "Chinese Yuan" },
-        { "value": "HKD", "label": "Hong Kong Dollar" },
-        { "value": "NZD", "label": "New Zealand Dollar" }
+        { "value": "Bangalore India", "label": "Bangalore India" },
+        { "value": "Chennai India", "label": "Chennai India" },
+        { "value": "Delhi India", "label": "Delhi India" },
+        { "value": "Mumbai India", "label": "Mumbai India" },
+        { "value": "Pune India", "label": "Pune India" }
       ],
-      "validation": {
-        "required": true,
-        "singleSelect": true
-      }
+      "validation": { "required": true, "singleSelect": true },
+      "ui": { "placeholder": "Select City" }
     },
     {
-      "name": "salary",
-      "label": "Salary",
-      "type": "number",
-      "componentKey": "cefs-bnp-ui-txt",
-      "ui": {
-        "placeholder": "Enter salary amount"
+      "name": "destinationCity",
+      "label": "Destination City",
+      "type": "select",
+      "componentKey": "cefs-bnp-ui-ddl",
+      "layout": "col-right",
+      "options": [
+        { "value": "Bangalore India", "label": "Bangalore India" },
+        { "value": "Bangkok Thailand", "label": "Bangkok Thailand" },
+        { "value": "Beijing China", "label": "Beijing China" },
+        { "value": "Berlin Germany", "label": "Berlin Germany" },
+        { "value": "Brussels Belgium", "label": "Brussels Belgium" },
+        { "value": "Chennai India", "label": "Chennai India" },
+        { "value": "Delhi India", "label": "Delhi India" },
+        { "value": "Frankfurt Germany", "label": "Frankfurt Germany" },
+        { "value": "Geneva Switzerland", "label": "Geneva Switzerland" },
+        { "value": "Hong Kong Hong Kong", "label": "Hong Kong Hong Kong" },
+        { "value": "Kuala Lumpur Malaysia", "label": "Kuala Lumpur Malaysia" },
+        { "value": "Lisbon Portugal", "label": "Lisbon Portugal" },
+        { "value": "London UK-Europe", "label": "London UK-Europe" },
+        { "value": "London United Kingdom", "label": "London United Kingdom" },
+        { "value": "Luxembourg City Luxembourg", "label": "Luxembourg City Luxembourg" },
+        { "value": "Madrid Spain", "label": "Madrid Spain" },
+        { "value": "Manama Bahrain", "label": "Manama Bahrain" },
+        { "value": "Manila Philippines", "label": "Manila Philippines" },
+        { "value": "Montreal Canada", "label": "Montreal Canada" },
+        { "value": "Mumbai India", "label": "Mumbai India" },
+        { "value": "New Jersey United States of America", "label": "New Jersey United States of America" },
+        { "value": "New York United States of America", "label": "New York United States of America" },
+        { "value": "Paris France", "label": "Paris France" },
+        { "value": "Paris UK-Europe", "label": "Paris UK-Europe" },
+        { "value": "Pune India", "label": "Pune India" },
+        { "value": "Sao Paulo Brazil", "label": "Sao Paulo Brazil" },
+        { "value": "Seoul South Korea", "label": "Seoul South Korea" },
+        { "value": "Singapore City Singapore", "label": "Singapore City Singapore" },
+        { "value": "Sydney Australia", "label": "Sydney Australia" },
+        { "value": "Taipei Taiwan", "label": "Taipei Taiwan" },
+        { "value": "Warsaw Poland", "label": "Warsaw Poland" }
+      ],
+      "validation": { "required": true, "singleSelect": true },
+      "ui": { "placeholder": "Select City" }
+    },
+    {
+      "name": "travelClass",
+      "label": "Travel Class",
+      "type": "select",
+      "componentKey": "cefs-bnp-ui-ddl",
+      "layout": "col-left",
+      "options": [
+        { "value": "business", "label": "Business" },
+        { "value": "economy", "label": "Economy" }
+      ],
+      "validation": { "required": true, "singleSelect": true },
+      "ui": { "placeholder": "Travel Class" }
+    },
+    {
+      "name": "travelType",
+      "label": "Travel Type",
+      "type": "select",
+      "componentKey": "cefs-bnp-ui-ddl",
+      "layout": "col-right",
+      "options": [
+        { "value": "domestic", "label": "Domestic" },
+        { "value": "international", "label": "International" }
+      ],
+      "validation": { "required": true, "singleSelect": true },
+      "ui": { "placeholder": "Travel Type" }
+    },
+    {
+      "name": "budgetType",
+      "label": "Budget Type",
+      "type": "select",
+      "componentKey": "cefs-bnp-ui-ddl",
+      "layout": "col-left",
+      "options": [
+        { "value": "BAU", "label": "BAU" },
+        { "value": "NBAU", "label": "NBAU" }
+      ],
+      "validation": { "required": true, "singleSelect": true },
+      "ui": { "placeholder": "Travel Type" }
+    },
+    {
+      "name": "justification",
+      "label": "Justification",
+      "type": "textarea",
+      "componentKey": "cefs-bnp-ui-textarea",
+      "layout": "full",
+      "ui": { "placeholder": "Enter Justification." },
+      "validation": { "required": false }
+    },
+    {
+      "name": "cluster",
+      "label": "Cluster",
+      "type": "select",
+      "componentKey": "cefs-bnp-ui-ddl",
+      "layout": "col-left",
+      "options": [
+        { "value": "ALM Treasury IT", "label": "ALM Treasury IT" },
+        { "value": "Banking IT", "label": "Banking IT" },
+        { "value": "CIB ITO CCCO", "label": "CIB ITO CCCO" },
+        { "value": "CIB ITO Industrial Transformation", "label": "CIB ITO Industrial Transformation" },
+        { "value": "CIB ITO Management", "label": "CIB ITO Management" },
+        { "value": "CIB ITO Production", "label": "CIB ITO Production" },
+        { "value": "Client Engagement & Financial security IT", "label": "Client Engagement & Financial security IT" },
+        { "value": "Commercial, Personal Banking & Services(CPBS)", "label": "Commercial, Personal Banking & Services(CPBS)" },
+        { "value": "Data Office", "label": "Data Office" },
+        { "value": "Investment Partners", "label": "Investment Partners" },
+        { "value": "Investment & Protection Services", "label": "Investment & Protection Services" },
+        { "value": "ISPL ITG CIO Office", "label": "ISPL ITG CIO Office" },
+        { "value": "IT Bank of West", "label": "IT Bank of West" },
+        { "value": "ITG Central", "label": "ITG Central" },
+        { "value": "Local COO", "label": "Local COO" },
+        { "value": "Markets IT", "label": "Markets IT" },
+        { "value": "Securities Services IT", "label": "Securities Services IT" },
+        { "value": "RISK Global services", "label": "RISK Global services" },
+        { "value": "Risk_ORC", "label": "Risk_ORC" }
+      ],
+      "validation": { "required": true, "singleSelect": true },
+      "ui": { "placeholder": "Select Cluster" }
+    },
+    {
+      "name": "subCluster",
+      "label": "Sub - Cluster",
+      "type": "select",
+      "componentKey": "cefs-bnp-ui-ddl",
+      "layout": "col-right",
+      "dependsOn": "cluster",
+      "optionsByParent": {
+        "Client Engagement & Financial security IT": [
+          { "value": "CEFS-APP", "label": "CEFS Application" },
+          { "value": "CEFS-INFRA", "label": "CEFS Infrastructure" },
+          { "value": "CEFS-DATA", "label": "CEFS Data & Analytics" },
+          { "value": "CEFS-SEC", "label": "CEFS Security" }
+        ],
+        "CIB ITO Production": [
+          { "value": "PROD-OPS", "label": "Production Operations" },
+          { "value": "PROD-INFRA", "label": "Production Infrastructure" }
+        ],
+        "Markets IT": [
+          { "value": "MKT-EQUITIES", "label": "Equities IT" },
+          { "value": "MKT-RATES", "label": "Rates IT" },
+          { "value": "MKT-FX", "label": "FX IT" }
+        ],
+        "Banking IT": [
+          { "value": "BANK-RETAIL", "label": "Retail Banking IT" },
+          { "value": "BANK-CORP", "label": "Corporate Banking IT" }
+        ],
+        "ALM Treasury IT": [
+          { "value": "ALM-CORE", "label": "ALM Core" },
+          { "value": "ALM-RISK", "label": "ALM Risk" }
+        ],
+        "CIB ITO CCCO": [
+          { "value": "CCCO-OPS", "label": "CCCO Operations" },
+          { "value": "CCCO-COMP", "label": "CCCO Compliance" }
+        ],
+        "Data Office": [
+          { "value": "DO-GOV", "label": "Data Governance" },
+          { "value": "DO-ENG", "label": "Data Engineering" }
+        ],
+        "ITG Central": [
+          { "value": "ITGC-ARCH", "label": "Architecture" },
+          { "value": "ITGC-SEC", "label": "Security" }
+        ]
       },
-      "validation": {
-        "required": true
-      }
+      "options": [],
+      "validation": { "required": true, "singleSelect": true },
+      "ui": { "placeholder": "Select Sub - Cluster" }
+    },
+    {
+      "name": "hod",
+      "label": "HOD:",
+      "type": "readonly",
+      "componentKey": "cefs-bnp-ui-readonly",
+      "layout": "col-left",
+      "ui": { "placeholder": "Simone TESTA" }
     }
   ]
 }

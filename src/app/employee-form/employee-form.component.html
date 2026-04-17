@@ -1,131 +1,195 @@
-<div class="ef-page" *ngIf="config">
+<div class="ef-page" *ngIf="config && form">
 
-  <!-- Header -->
+  <!-- ── App Header ─────────────────────────────────────────────── -->
   <header class="ef-header">
     <div class="ef-header__inner">
-      <div class="ef-header__brand">
-        <span class="ef-brand-bar"></span>
-        <span class="ef-brand-text">BNP Paribas</span>
-      </div>
+      <span class="ef-brand-bar"></span>
+      <span class="ef-brand-text">BNP Paribas</span>
       <span class="ef-header__title">CEFS Employee Platform</span>
     </div>
   </header>
 
-  <!-- Main -->
+  <!-- ── Modal Shell ────────────────────────────────────────────── -->
   <main class="ef-main">
-    <div class="ef-card">
+    <div class="ef-modal">
 
-      <!-- Card Header -->
-      <div class="ef-card__head">
-        <h1 class="ef-card__title">{{ config.title }}</h1>
-        <p class="ef-card__desc">{{ config.description }}</p>
+      <!-- Modal header -->
+      <div class="ef-modal__head">
+        <h1 class="ef-modal__title">{{ config.title }}</h1>
+        <button type="button" class="ef-modal__close" (click)="onReset()" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1 1L13 13M13 1L1 13" stroke="#333" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
       </div>
 
-      <!-- Success Banner -->
-      <div class="ef-success-banner" *ngIf="submitSuccess">
-        <span class="ef-success-icon">&#10003;</span>
+      <!-- ── Success state ─────────────────────────────────────── -->
+      <div class="ef-success" *ngIf="submitSuccess">
+        <span class="ef-success__icon">&#10003;</span>
         <div>
-          <strong>Employee record created successfully!</strong>
-          <p>The form data has been submitted.</p>
+          <strong>Request submitted successfully!</strong>
+          <p>Your travel request has been created.</p>
         </div>
+        <button type="button" class="ef-btn ef-btn--ghost" (click)="onReset()">New Request</button>
       </div>
 
-      <!-- Form -->
+      <!-- ── Form ──────────────────────────────────────────────── -->
       <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate *ngIf="!submitSuccess">
+        <div class="ef-body">
 
-        <div class="ef-fields">
-          <ng-container *ngFor="let field of config.fields">
+          <ng-container *ngFor="let row of fieldRows">
 
-            <!-- Text / Number fields -->
-            <div class="ef-field-row" *ngIf="isTextField(field)">
-              <cefs-input-text
-                [formControlName]="field.name"
-                [name]="field.name"
-                [label]="field.label"
-                [placeholder]="field.ui?.placeholder || ''"
-                [required]="field.validation?.required || false"
-                [maxLength]="field.validation?.maxLength"
-                [pattern]="field.validation?.pattern || ''"
-                [componentKey]="field.componentKey"
-              ></cefs-input-text>
+            <!-- Full-width search-select -->
+            <div class="ef-row ef-row--full" *ngIf="row.full && isSearch(row.full)">
+              <cefs-search-select
+                [formControlName]="row.full.name"
+                [name]="row.full.name"
+                [label]="row.full.label"
+                [options]="[]"
+                [required]="row.full.validation?.required || false"
+              ></cefs-search-select>
             </div>
 
-            <!-- Email field -->
-            <div class="ef-field-row" *ngIf="isEmailField(field)">
-              <cefs-email-input
-                [formControlName]="field.name"
-                [name]="field.name"
-                [label]="field.label"
-                [placeholder]="field.ui?.placeholder || 'Enter e-mail address'"
-                [required]="field.validation?.required || false"
-                [maxLength]="field.validation?.maxLength || 100"
-                [componentKey]="field.componentKey"
-                [enabledFlag]="true"
-              ></cefs-email-input>
+            <!-- Full-width textarea -->
+            <div class="ef-row ef-row--full" *ngIf="row.full && isTextarea(row.full)">
+              <div class="ef-field">
+                <label class="ef-label">{{ row.full.label }}</label>
+                <textarea
+                  class="ef-textarea"
+                  [formControlName]="row.full.name"
+                  [placeholder]="row.full.ui?.placeholder || ''"
+                  rows="3"
+                ></textarea>
+              </div>
             </div>
 
-            <!-- Dropdown / Select field -->
-            <div class="ef-field-row" *ngIf="isDropdownField(field)">
-              <cefs-dropdown
-                [formControlName]="field.name"
-                [name]="field.name"
-                [label]="field.label"
-                [options]="field.options || []"
-                [required]="field.validation?.required || false"
-                [singleSelect]="field.validation?.singleSelect || false"
-                [componentKey]="field.componentKey"
-                placeholder="Select..."
-              ></cefs-dropdown>
-            </div>
+            <!-- Two-column row -->
+            <div class="ef-row ef-row--cols" *ngIf="!row.full">
+
+              <!-- LEFT column -->
+              <div class="ef-col">
+                <!-- Readonly -->
+                <div class="ef-field" *ngIf="isReadonly(row.left)">
+                  <label class="ef-label">{{ row.left.label }}</label>
+                  <div class="ef-readonly">{{ row.left.ui?.placeholder }}</div>
+                </div>
+                <!-- Date -->
+                <div class="ef-field" *ngIf="isDate(row.left)">
+                  <label class="ef-label">{{ row.left.label }}</label>
+                  <div class="ef-date-wrap">
+                    <input
+                      #leftDateInput
+                      class="ef-input"
+                      type="date"
+                      [formControlName]="row.left.name"
+                      [placeholder]="row.left.ui?.placeholder || ''"
+                      [attr.min]="getDateMin(row.left.name)"
+                      [attr.max]="getDateMax(row.left.name)"
+                    />
+                    <button type="button" class="ef-date-trigger" (click)="openDatePicker(leftDateInput)" aria-label="Open calendar">
+                      <svg class="ef-date-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <rect x="1" y="3" width="14" height="12" rx="1.5" stroke="#9E9E9E" stroke-width="1.3"/>
+                        <path d="M1 7h14" stroke="#9E9E9E" stroke-width="1.3"/>
+                        <path d="M5 1v4M11 1v4" stroke="#9E9E9E" stroke-width="1.3" stroke-linecap="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="ef-date-error" *ngIf="hasDateRangeError(row.left.name)">
+                    End Date must be the same as or later than Start Date.
+                  </div>
+                </div>
+                <!-- Dropdown -->
+                <div class="ef-field" *ngIf="isDropdown(row.left)">
+                  <label class="ef-label">{{ row.left.label }}</label>
+                  <cefs-dropdown
+                    [formControlName]="row.left.name"
+                    [name]="row.left.name"
+                    [label]="''"
+                    [options]="getOptions(row.left)"
+                    [required]="row.left.validation?.required || false"
+                    [singleSelect]="row.left.validation?.singleSelect || false"
+                    [placeholder]="row.left.dependsOn && getOptions(row.left).length === 0
+                      ? 'Select Cluster first...'
+                      : (row.left.ui?.placeholder || 'Select...')"
+                  ></cefs-dropdown>
+                </div>
+              </div>
+
+              <!-- RIGHT column -->
+              <div class="ef-col" *ngIf="row.right">
+                <!-- Readonly -->
+                <div class="ef-field" *ngIf="isReadonly(row.right)">
+                  <label class="ef-label">{{ row.right.label }}</label>
+                  <div class="ef-readonly">{{ row.right.ui?.placeholder }}</div>
+                </div>
+                <!-- Date -->
+                <div class="ef-field" *ngIf="isDate(row.right)">
+                  <label class="ef-label">{{ row.right.label }}</label>
+                  <div class="ef-date-wrap">
+                    <input
+                      #rightDateInput
+                      class="ef-input"
+                      type="date"
+                      [formControlName]="row.right.name"
+                      [placeholder]="row.right.ui?.placeholder || ''"
+                      [attr.min]="getDateMin(row.right.name)"
+                      [attr.max]="getDateMax(row.right.name)"
+                    />
+                    <button type="button" class="ef-date-trigger" (click)="openDatePicker(rightDateInput)" aria-label="Open calendar">
+                      <svg class="ef-date-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <rect x="1" y="3" width="14" height="12" rx="1.5" stroke="#9E9E9E" stroke-width="1.3"/>
+                        <path d="M1 7h14" stroke="#9E9E9E" stroke-width="1.3"/>
+                        <path d="M5 1v4M11 1v4" stroke="#9E9E9E" stroke-width="1.3" stroke-linecap="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="ef-date-error" *ngIf="hasDateRangeError(row.right.name)">
+                    End Date must be the same as or later than Start Date.
+                  </div>
+                </div>
+                <!-- Dropdown -->
+                <div class="ef-field" *ngIf="isDropdown(row.right)">
+                  <label class="ef-label">{{ row.right.label }}</label>
+                  <cefs-dropdown
+                    [formControlName]="row.right.name"
+                    [name]="row.right.name"
+                    [label]="''"
+                    [options]="getOptions(row.right)"
+                    [required]="row.right.validation?.required || false"
+                    [singleSelect]="row.right.validation?.singleSelect || false"
+                    [placeholder]="row.right.dependsOn && getOptions(row.right).length === 0
+                      ? 'Select Cluster first...'
+                      : (row.right.ui?.placeholder || 'Select...')"
+                  ></cefs-dropdown>
+                </div>
+              </div>
+
+            </div><!-- /ef-row--cols -->
 
           </ng-container>
-        </div>
 
-        <!-- Validation error hint -->
-        <div class="ef-debug" *ngIf="submitted && !form.valid">
-          <p class="ef-debug__title">&#9888; Please fix the validation errors above before submitting.</p>
-        </div>
+          <!-- Validation hint -->
+          <div class="ef-error-hint" *ngIf="submitted && !form.valid">
+            &#9888; Please fix the errors above before submitting.
+          </div>
 
-        <!-- Actions inside form so type=submit triggers ngSubmit -->
-        <div class="ef-actions">
-          <button type="button" class="ef-btn ef-btn--ghost" (click)="onReset()">Reset</button>
+        </div><!-- /ef-body -->
+
+        <!-- Modal footer actions -->
+        <div class="ef-footer">
+          <button type="button" class="ef-btn ef-btn--ghost" (click)="onReset()">Cancel</button>
           <button type="submit" class="ef-btn ef-btn--primary">Submit</button>
         </div>
 
       </form>
 
-      <!-- Submitted payload -->
+      <!-- Submitted payload preview -->
       <div class="ef-preview" *ngIf="submitSuccess">
-        <p class="ef-preview__title">Submitted Payload</p>
+        <p class="ef-preview__label">Submitted Payload</p>
         <pre>{{ formValue }}</pre>
-        <div class="ef-actions ef-actions--reset">
-          <button type="button" class="ef-btn ef-btn--ghost" (click)="onReset()">Reset</button>
-        </div>
       </div>
 
-    </div>
-
-    <!-- Component Library Showcase -->
-    <div class="ef-showcase">
-      <p class="ef-showcase__title">CEFS UI Library &#8211; Component Registry</p>
-      <div class="ef-showcase__grid">
-        <div class="ef-showcase__item">
-          <span class="ef-badge">cefs-bnp-ui-txt</span>
-          <p>InputTextComponent</p>
-          <small>Text/number input, required, maxLength, pattern validation</small>
-        </div>
-        <div class="ef-showcase__item">
-          <span class="ef-badge ef-badge--email">cefs-bnp-ui-email</span>
-          <p>EmailInputComponent</p>
-          <small>Email validation, RFC pattern, feature flag support</small>
-        </div>
-        <div class="ef-showcase__item">
-          <span class="ef-badge ef-badge--dd">cefs-bnp-ui-ddl</span>
-          <p>DropdownComponent</p>
-          <small>Multi/single select, checkbox UI, JSON-driven options</small>
-        </div>
-      </div>
-    </div>
-
+    </div><!-- /ef-modal -->
   </main>
+
 </div>

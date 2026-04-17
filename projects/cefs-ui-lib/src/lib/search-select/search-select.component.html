@@ -1,0 +1,103 @@
+<div class="cefs-field-wrapper">
+  <label class="cefs-label" *ngIf="label">{{ label }}</label>
+
+  <div class="cefs-ss-box"
+       [class.is-error]="hasError"
+       [class.is-disabled]="isDisabled"
+       [class.is-open]="isOpen">
+
+    <!-- ── Row 1: NAME cell + Search input ──────────────────────── -->
+    <div class="cefs-ss-row cefs-ss-row--search">
+
+      <div class="cefs-ss-cell cefs-ss-cell--label cefs-ss-cell--green"
+           (click)="togglePanel()">
+        <span class="cefs-ss-col-text">NAME</span>
+        <svg class="cefs-ss-chevron"
+             [class.cefs-ss-chevron--up]="isOpen"
+             width="9" height="5" viewBox="0 0 9 5" fill="none">
+          <path d="M1 1L4.5 4.5L8 1"
+                stroke="#fff" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <div class="cefs-ss-cell cefs-ss-cell--input">
+        <input
+          class="cefs-ss-input"
+          type="text"
+          placeholder="Search"
+          [(ngModel)]="searchQuery"
+          (focus)="openPanel()"
+          (input)="openPanel()"
+          [disabled]="isDisabled"
+          autocomplete="off"
+        />
+        <svg class="cefs-ss-icon-search"
+             width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <circle cx="5.8" cy="5.8" r="4.3"
+                  stroke="#9E9E9E" stroke-width="1.4"/>
+          <path d="M9.2 9.2L12.5 12.5"
+                stroke="#9E9E9E" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+    </div>
+
+    <!-- ── Row 2: UID cell + value / error ──────────────────────── -->
+    <div class="cefs-ss-row cefs-ss-row--data" *ngIf="!isOpen">
+
+      <div class="cefs-ss-cell cefs-ss-cell--label cefs-ss-cell--uid">
+        <span class="cefs-ss-col-text">UID</span>
+      </div>
+
+      <div class="cefs-ss-cell cefs-ss-cell--value">
+
+        <!-- Error state -->
+        <ng-container *ngIf="hasError && !selectedOption">
+          <span class="cefs-ss-error-icon">!</span>
+          <span class="cefs-ss-error-text">{{ errorMessage }}</span>
+        </ng-container>
+
+        <!-- Selected value -->
+        <ng-container *ngIf="selectedOption">
+          <span class="cefs-ss-selected-uid">{{ selectedOption.uid }}</span>
+          <span class="cefs-ss-selected-name">{{ selectedOption.name }}</span>
+          <button type="button" class="cefs-ss-clear"
+                  (click)="clearSelection($event)" aria-label="Clear selection">
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+              <path d="M1 1L7 7M7 1L1 7"
+                    stroke="#9E9E9E" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </ng-container>
+
+      </div>
+    </div>
+
+    <!-- ── Dropdown panel ────────────────────────────────────────── -->
+    <div class="cefs-ss-panel" *ngIf="isOpen">
+
+      <!-- Column header -->
+      <div class="cefs-ss-panel-header">
+        <span class="cefs-ss-panel-header__uid">UID</span>
+        <span class="cefs-ss-panel-header__name">NAME</span>
+      </div>
+
+      <!-- Options -->
+      <div class="cefs-ss-option"
+           *ngFor="let opt of filteredOptions"
+           [class.cefs-ss-option--active]="selectedOption?.uid === opt.uid"
+           (mousedown)="$event.preventDefault()"
+           (click)="select(opt)">
+        <span class="cefs-ss-option__uid">{{ opt.uid }}</span>
+        <span class="cefs-ss-option__name">{{ opt.name }}</span>
+      </div>
+
+      <div class="cefs-ss-empty" *ngIf="filteredOptions.length === 0">
+        No results found
+      </div>
+
+    </div>
+
+  </div>
+</div>

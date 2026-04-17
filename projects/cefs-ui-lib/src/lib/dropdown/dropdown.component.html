@@ -1,6 +1,6 @@
 <div class="cefs-field-wrapper">
   <!-- Label -->
-  <label class="cefs-label">
+  <label class="cefs-label" *ngIf="label">
     {{ label }}
     <span *ngIf="required" class="required-star">*</span>
     <span *ngIf="showInfo" class="info-icon" [title]="infoTooltip">i</span>
@@ -41,15 +41,14 @@
         role="option"
         [attr.aria-selected]="isSelected(option.value)"
       >
-        <!-- Large square checkbox — same for single and multi-select -->
         <span class="dd-checkbox" [class.checked]="isSelected(option.value)">
           <svg *ngIf="isSelected(option.value)" width="15" height="12" viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1.5 6L5.5 10L13.5 2" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </span>
-
         <span class="dd-option-label" [class.bold]="isSelected(option.value)">{{ option.label }}</span>
       </div>
+      <div class="dd-empty" *ngIf="options.length === 0">No options available</div>
     </div>
   </div>
 

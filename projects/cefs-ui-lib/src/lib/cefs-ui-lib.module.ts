@@ -5,6 +5,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { InputTextComponent } from './input-text/input-text.component';
 import { EmailInputComponent } from './email-input/email-input.component';
 import { DropdownComponent } from './dropdown/dropdown.component';
+import { PhoneInputComponent } from './phone-input/phone-input.component';
+import { SearchSelectComponent } from './search-select/search-select.component';
 
 @NgModule({
   imports: [
@@ -13,12 +15,16 @@ import { DropdownComponent } from './dropdown/dropdown.component';
     FormsModule,
     InputTextComponent,
     EmailInputComponent,
-    DropdownComponent
+    DropdownComponent,
+    PhoneInputComponent,
+    SearchSelectComponent
   ],
   exports: [
     InputTextComponent,
     EmailInputComponent,
-    DropdownComponent
+    DropdownComponent,
+    PhoneInputComponent,
+    SearchSelectComponent
   ]
 })
 export class CefsUiLibModule {}

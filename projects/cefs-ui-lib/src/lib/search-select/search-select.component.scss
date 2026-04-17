@@ -1,0 +1,291 @@
+@use '../variables' as v;
+
+// ── Design token: left column width matches the NAME/UID label cell ──────────
+$col-width: 88px;
+$row-height: 32px;
+
+.cefs-field-wrapper { @include v.field-wrapper; }
+.cefs-label { @include v.field-label; }
+
+// ── Outer box: thin border, no overflow clip so panel can escape ─────────────
+.cefs-ss-box {
+  position: relative;
+  border: 1px solid v.$color-border;
+  border-radius: 0;
+  font-family: v.$font-family;
+  background: v.$color-bg;
+  width: 100%;
+  box-sizing: border-box;
+
+  &.is-error { border-color: v.$color-border-error; }
+  &.is-disabled { opacity: 0.55; pointer-events: none; }
+}
+
+// ── Row base ─────────────────────────────────────────────────────────────────
+.cefs-ss-row {
+  display: flex;
+  align-items: stretch;
+  height: $row-height;
+
+  // Row 2 gets a top hairline divider
+  &--data {
+    border-top: 1px solid v.$color-border;
+  }
+}
+
+// ── Left label cell ──────────────────────────────────────────────────────────
+.cefs-ss-cell {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+
+  // The fixed-width left column (NAME / UID)
+  &--label {
+    width: $col-width;
+    min-width: $col-width;
+    flex-shrink: 0;
+    padding: 0 10px;
+    border-right: 1px solid v.$color-border;
+    gap: 4px;
+  }
+
+  // Green NAME header cell
+  &--green {
+    background: v.$color-primary;
+    border-right-color: v.$color-primary-dark;
+    cursor: pointer;
+  }
+
+  // Plain UID cell
+  &--uid {
+    background: v.$color-bg;
+    cursor: default;
+  }
+
+  // Input area (fills remaining width)
+  &--input {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: text;
+  }
+
+  // Value / error area
+  &--value {
+    flex: 1;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow: hidden;
+    min-width: 0;
+  }
+}
+
+// ── Column label text ────────────────────────────────────────────────────────
+.cefs-ss-col-text {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+
+  .cefs-ss-cell--green & { color: #fff; }
+  .cefs-ss-cell--uid &   { color: v.$color-placeholder; }
+}
+
+// ── Chevron in NAME cell ─────────────────────────────────────────────────────
+.cefs-ss-chevron {
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+  &--up { transform: rotate(180deg); }
+}
+
+// ── Search input ─────────────────────────────────────────────────────────────
+.cefs-ss-input {
+  flex: 1;
+  height: 100%;
+  border: none;
+  outline: none;
+  padding: 0 32px 0 10px;
+  font-size: 13px;
+  font-family: v.$font-family;
+  color: v.$color-text;
+  background: transparent;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: v.$color-placeholder;
+    font-size: 13px;
+  }
+  &:disabled { cursor: not-allowed; }
+}
+
+// ── Magnifier icon (right-pinned) ────────────────────────────────────────────
+.cefs-ss-icon-search {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+// ── Error state ──────────────────────────────────────────────────────────────
+.cefs-ss-error-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: v.$color-error;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cefs-ss-error-text {
+  color: v.$color-error;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: v.$font-family;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ── Selected value display ───────────────────────────────────────────────────
+.cefs-ss-selected-uid {
+  font-size: 11px;
+  color: v.$color-placeholder;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.cefs-ss-selected-name {
+  font-size: 13px;
+  color: v.$color-text;
+  font-weight: 500;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.cefs-ss-clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0.4;
+  line-height: 1;
+  &:hover { opacity: 0.9; }
+}
+
+// ── Dropdown panel (floats below the box) ────────────────────────────────────
+.cefs-ss-panel {
+  position: absolute;
+  top: calc(100% + 1px);
+  left: -1px;          // align with outer border
+  right: -1px;
+  background: v.$color-bg;
+  border: 1px solid v.$color-border;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 200;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-thumb { background: v.$color-border; border-radius: 2px; }
+}
+
+// ── Panel column header ───────────────────────────────────────────────────────
+.cefs-ss-panel-header {
+  display: flex;
+  align-items: center;
+  height: 26px;
+  background: #F5F5F5;
+  border-bottom: 1px solid v.$color-border;
+  padding: 0;
+
+  &__uid {
+    width: $col-width;
+    min-width: $col-width;
+    padding: 0 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: v.$color-placeholder;
+    border-right: 1px solid v.$color-border;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  &__name {
+    flex: 1;
+    padding: 0 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: v.$color-placeholder;
+  }
+}
+
+// ── Option rows ───────────────────────────────────────────────────────────────
+.cefs-ss-option {
+  display: flex;
+  align-items: center;
+  height: 34px;
+  cursor: pointer;
+  transition: background 0.1s;
+
+  &:hover { background: v.$color-dropdown-hover; }
+
+  &--active {
+    background: #EAF7F1;
+    .cefs-ss-option__name { color: v.$color-primary; font-weight: 600; }
+  }
+
+  &__uid {
+    width: $col-width;
+    min-width: $col-width;
+    padding: 0 10px;
+    font-size: 11px;
+    color: v.$color-placeholder;
+    border-right: 1px solid v.$color-border;
+    box-sizing: border-box;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+  }
+
+  &__name {
+    flex: 1;
+    padding: 0 10px;
+    font-size: 13px;
+    color: v.$color-text;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.cefs-ss-empty {
+  padding: 10px;
+  font-size: 12px;
+  color: v.$color-placeholder;
+  text-align: center;
+}

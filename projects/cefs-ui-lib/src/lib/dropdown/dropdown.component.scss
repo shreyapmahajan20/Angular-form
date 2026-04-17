@@ -199,6 +199,15 @@
   }
 }
 
+// ── Empty state ───────────────────────────────────────────────────────────────
+.dd-empty {
+  padding: 12px 20px;
+  font-size: 14px;
+  color: v.$color-placeholder;
+  font-family: v.$font-family;
+  text-align: center;
+}
+
 // ── Error ─────────────────────────────────────────────────────────────────────
 .cefs-error {
   @include v.error-message;

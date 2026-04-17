@@ -1,15 +1,16 @@
-// ── CEFS Demo App – Employee Form ─────────────────────────────────────────────
-$green:     #00965E;
-$green-dark:#007A4C;
-$white:     #FFFFFF;
-$bg:        #F7F8FA;
-$border:    #E0E0E0;
-$text:      #1A1A1A;
-$muted:     #666666;
-$error:     #D0021B;
-$font:      'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$green:      #00965E;
+$green-dark: #007A4C;
+$white:      #FFFFFF;
+$bg:         #F4F5F7;
+$border:     #CCCCCC;
+$border-focus: #333333;
+$text:       #1A1A1A;
+$muted:      #9E9E9E;
+$label:      #333333;
+$error:      #D0021B;
+$font:       'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
-// ── Page ──────────────────────────────────────────────────────────────────────
+// ── Page shell ────────────────────────────────────────────────────────────────
 .ef-page {
   min-height: 100vh;
   background: $bg;
@@ -18,7 +19,7 @@ $font:      'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-family: $font;
 }
 
-// ── Header ────────────────────────────────────────────────────────────────────
+// ── App header ────────────────────────────────────────────────────────────────
 .ef-header {
   background: $white;
   border-bottom: 3px solid $green;
@@ -27,19 +28,13 @@ $font:      'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   z-index: 50;
 
   &__inner {
-    max-width: 660px;
+    max-width: 800px;
     margin: 0 auto;
-    padding: 0 20px;
-    height: 60px;
+    padding: 0 24px;
+    height: 56px;
     display: flex;
     align-items: center;
-    gap: 14px;
-  }
-
-  &__brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    gap: 12px;
   }
 
   &__title {
@@ -47,45 +42,46 @@ $font:      'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 500;
     color: $muted;
     margin-left: auto;
-    letter-spacing: 0.03em;
   }
 }
 
 .ef-brand-bar {
   width: 4px;
-  height: 28px;
+  height: 26px;
   background: $green;
   border-radius: 2px;
+  flex-shrink: 0;
 }
 
 .ef-brand-text {
   font-size: 15px;
   font-weight: 700;
   color: $text;
-  letter-spacing: -0.01em;
 }
 
-// ── Main ──────────────────────────────────────────────────────────────────────
+// ── Main / modal centering ────────────────────────────────────────────────────
 .ef-main {
   flex: 1;
-  max-width: 700px;
-  margin: 36px auto 0;
-  padding: 0 20px 80px;
-  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px 80px;
 }
 
-// ── Card ──────────────────────────────────────────────────────────────────────
-.ef-card {
+// ── Modal card ────────────────────────────────────────────────────────────────
+.ef-modal {
   background: $white;
   border-radius: 8px;
-  border: 1px solid $border;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 740px;
+  overflow: visible;
 
   &__head {
-    padding: 28px 32px 20px;
-    border-bottom: 1px solid #E8E8E8;
-    background: linear-gradient(135deg, #F9FFFE 0%, $white 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 28px 16px;
+    border-bottom: 1px solid #EBEBEB;
   }
 
   &__title {
@@ -93,44 +89,202 @@ $font:      'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 700;
     color: $text;
     letter-spacing: -0.02em;
-    margin-bottom: 4px;
+    margin: 0;
   }
 
-  &__desc {
-    font-size: 13px;
-    color: $muted;
-    line-height: 1.5;
+  &__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    opacity: 0.5;
+    &:hover { opacity: 1; }
   }
 }
 
-// ── Form ──────────────────────────────────────────────────────────────────────
-form {
-  padding: 28px 32px 0;
-}
-
-.ef-fields {
+// ── Form body ─────────────────────────────────────────────────────────────────
+.ef-body {
+  padding: 20px 28px 8px;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 16px;
 }
 
-.ef-field-row {
+// ── Rows ──────────────────────────────────────────────────────────────────────
+.ef-row {
+  &--full { width: 100%; }
+
+  &--cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+
+    @media (max-width: 560px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.ef-col { min-width: 0; }
+
+// ── Field wrapper ─────────────────────────────────────────────────────────────
+.ef-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   width: 100%;
+
+  // Override cefs-dropdown label — we render our own label above
+  cefs-dropdown .cefs-label { display: none !important; }
 }
 
-// ── Actions ───────────────────────────────────────────────────────────────────
-.ef-actions {
+// Make shared dropdown control match this form's compact UI sizing.
+:host ::ng-deep cefs-dropdown .cefs-dd-trigger {
+  height: 40px;
+  border: 1.5px solid $border;
+  border-radius: 4px;
+  padding: 0 12px;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+:host ::ng-deep cefs-dropdown .dd-arrow svg {
+  width: 14px;
+  height: 10px;
+}
+
+:host ::ng-deep cefs-dropdown .cefs-dd-panel {
+  margin-top: 4px;
+  border: 1.5px solid $border;
+  border-radius: 4px;
+  max-height: 220px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+:host ::ng-deep cefs-dropdown .cefs-dd-option {
+  padding: 10px 12px;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.35;
+  align-items: flex-start;
+}
+
+:host ::ng-deep cefs-dropdown .dd-checkbox {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  min-height: 18px;
+  border-radius: 3px;
+  margin-top: 1px;
+}
+
+// ── Label ─────────────────────────────────────────────────────────────────────
+.ef-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: $label;
+  font-family: $font;
+  line-height: 1.3;
+}
+
+// ── Readonly display field ────────────────────────────────────────────────────
+.ef-readonly {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 14px;
+  font-family: $font;
+  color: $muted;
+  background: #F9F9F9;
+  border: 1.5px solid $border;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+// ── Date input ────────────────────────────────────────────────────────────────
+.ef-date-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ef-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 36px 0 12px;
+  font-size: 14px;
+  font-family: $font;
+  color: $text;
+  background: $white;
+  border: 1.5px solid $border;
+  border-radius: 4px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+
+  &:focus { border-color: $border-focus; }
+  &::placeholder { color: $muted; }
+
+  // Hide native date picker icon on webkit
+  &[type="date"]::-webkit-calendar-picker-indicator { opacity: 0; cursor: pointer; }
+}
+
+.ef-date-icon {
+  display: block;
+}
+
+.ef-date-trigger {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  padding: 0;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.ef-date-error {
+  color: $error;
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+// ── Textarea ──────────────────────────────────────────────────────────────────
+.ef-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: $font;
+  color: $text;
+  background: $white;
+  border: 1.5px solid $border;
+  border-radius: 4px;
+  outline: none;
+  resize: vertical;
+  min-height: 80px;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+
+  &:focus { border-color: $border-focus; }
+  &::placeholder { color: $muted; }
+}
+
+// ── Footer actions ────────────────────────────────────────────────────────────
+.ef-footer {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  padding: 20px 32px 28px;
-  border-top: 1px solid #E8E8E8;
-
-  &--reset {
-    border-top: none;
-    padding-top: 0;
-    margin-top: 0;
-  }
+  padding: 16px 28px 24px;
+  border-top: 1px solid #EBEBEB;
 }
 
 // ── Buttons ───────────────────────────────────────────────────────────────────
@@ -138,173 +292,96 @@ form {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 40px;
-  padding: 0 24px;
-  border-radius: 4px;
+  min-width: 92px;
+  height: 36px;
+  padding: 0 18px;
+  border-radius: 2px;
   font-family: $font;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
   cursor: pointer;
-  border: none;
-  transition: background 0.15s ease, box-shadow 0.15s ease;
+  border: 1px solid transparent;
+  transition: background 0.15s, box-shadow 0.15s;
 
   &--primary {
     background: $green;
     color: $white;
-    letter-spacing: 0.02em;
-
-    &:hover {
-      background: $green-dark;
-      box-shadow: 0 2px 8px rgba(0, 150, 94, 0.35);
-    }
-
+    border-color: $green;
+    &:hover { background: $green-dark; box-shadow: 0 2px 8px rgba(0,150,94,0.3); }
     &:active { transform: translateY(1px); }
   }
 
   &--ghost {
-    background: transparent;
-    color: $muted;
-    border: 1.5px solid $border;
-
-    &:hover {
-      background: $bg;
-      border-color: #BBBBBB;
-    }
+    background: $white;
+    color: #4D4D4D;
+    border-color: #B8B8B8;
+    &:hover { background: #F7F7F7; }
   }
 }
 
-// ── Success Banner ────────────────────────────────────────────────────────────
-.ef-success-banner {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 20px 32px;
-  background: #F0FFF8;
-  border-bottom: 1px solid #B8EEDD;
-  color: #007A4C;
-
-  strong { font-weight: 700; display: block; }
-  p { font-size: 13px; color: $muted; }
-}
-
-.ef-success-icon {
-  width: 36px;
-  height: 36px;
-  background: $green;
-  color: $white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-
-// ── Debug ─────────────────────────────────────────────────────────────────────
-.ef-debug {
-  margin-top: 16px;
-  padding: 12px 16px;
+// ── Error hint ────────────────────────────────────────────────────────────────
+.ef-error-hint {
+  font-size: 13px;
+  color: $error;
+  font-weight: 500;
+  padding: 8px 12px;
   background: #FFF5F5;
   border: 1px solid #FFD0D0;
   border-radius: 4px;
-
-  &__title {
-    font-size: 13px;
-    color: $error;
-    font-weight: 500;
-  }
 }
 
-// ── Preview ───────────────────────────────────────────────────────────────────
-.ef-preview {
-  padding: 0 32px 28px;
+// ── Success state ─────────────────────────────────────────────────────────────
+.ef-success {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 28px;
+  background: #F0FFF8;
+  border-bottom: 1px solid #B8EEDD;
 
-  &__title {
-    font-size: 12px;
-    font-weight: 600;
+  strong { font-weight: 700; display: block; color: $green-dark; }
+  p { font-size: 13px; color: $muted; margin: 2px 0 0; }
+
+  &__icon {
+    width: 36px;
+    height: 36px;
+    background: $green;
+    color: $white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .ef-btn { margin-left: auto; }
+}
+
+// ── Payload preview ───────────────────────────────────────────────────────────
+.ef-preview {
+  padding: 0 28px 24px;
+
+  &__label {
+    font-size: 11px;
+    font-weight: 700;
     color: $muted;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    padding-top: 16px;
+    border-top: 1px solid #EBEBEB;
     margin-bottom: 8px;
-    padding-top: 20px;
-    border-top: 1px solid $border;
   }
 
   pre {
     background: #F4F5F7;
     border-radius: 4px;
-    padding: 16px;
+    padding: 14px;
     font-size: 12px;
     color: $text;
     overflow-x: auto;
     line-height: 1.6;
-  }
-}
-
-// ── Showcase ──────────────────────────────────────────────────────────────────
-.ef-showcase {
-  margin-top: 28px;
-
-  &__title {
-    font-size: 11px;
-    font-weight: 700;
-    color: $muted;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 12px;
-  }
-
-  &__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-
-    @media (max-width: 560px) {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  &__item {
-    background: $white;
-    border: 1px solid $border;
-    border-radius: 6px;
-    padding: 14px 16px;
-
-    p {
-      font-size: 13px;
-      font-weight: 600;
-      color: $text;
-      margin: 6px 0 3px;
-    }
-
-    small {
-      font-size: 11px;
-      color: $muted;
-      line-height: 1.4;
-      display: block;
-    }
-  }
-}
-
-.ef-badge {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 3px;
-  font-size: 10px;
-  font-weight: 600;
-  font-family: 'SF Mono', 'Fira Mono', monospace;
-  background: #E8F5EF;
-  color: $green-dark;
-  letter-spacing: 0.02em;
-
-  &--email {
-    background: #E8F0FF;
-    color: #2B5BE0;
-  }
-
-  &--dd {
-    background: #FFF3E8;
-    color: #C05E00;
   }
 }
